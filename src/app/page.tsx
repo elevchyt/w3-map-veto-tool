@@ -65,13 +65,11 @@ export default function Home() {
   };
 
   return (
-    <>
-      <h1>Map Veto Tool</h1>
-
+    <form>
       {/* Map Pool Selection */}
       <p>Choose a map pool:</p>
       {mapPools.length && !isPending ? (
-        <select>
+        <select required>
           {mapPools.map((map: unknown) => (
             <option key={map.id} value={map.name}>
               {map.name}
@@ -84,13 +82,14 @@ export default function Home() {
       {/* Player Names */}
       <div className="flex-column mt-2 mb-1">
         <p>Player Names (or BattleTags):</p>
-        <input type="text" placeholder="Host name" />
-        <input type="text" placeholder="Opponent name" />
+        <input required type="text" placeholder="Host name" />
+        <input required type="text" placeholder="Opponent name" />
       </div>
 
       {/* Action Buttons */}
       <button
         className="generic-button"
+        type="submit"
         onClick={() => {
           launchLobby();
         }}
@@ -101,6 +100,6 @@ export default function Home() {
 
       {/* Feedback */}
       {!mapPools.length && !isPending ? <ErrorHint /> : null}
-    </>
+    </form>
   );
 }
