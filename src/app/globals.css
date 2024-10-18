@@ -256,6 +256,10 @@ input:focus {
   outline: 0;
 }
 
+select {
+  cursor: pointer;
+}
+
 input[type="checkbox"]:focus {
   outline: 1px dotted #ffffff;
 }
