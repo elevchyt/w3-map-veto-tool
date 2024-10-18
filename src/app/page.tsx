@@ -7,6 +7,7 @@ import {
   maps2v2Atom,
   maps3v3Atom,
   maps4v4Atom,
+  mapsAllTheRandoms1v1Atom,
 } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
@@ -20,6 +21,9 @@ export default function Home() {
   const [maps2v2, setMaps2v2] = useAtom(maps2v2Atom);
   const [maps3v3, setMaps3v3] = useAtom(maps3v3Atom);
   const [maps4v4, setMaps4v4] = useAtom(maps4v4Atom);
+  const [mapsAllTheRandoms1v1, setMapsAllTheRandoms1v1] = useAtom(
+    mapsAllTheRandoms1v1Atom
+  );
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
 
   const w3championsLadderDataURL =
@@ -36,10 +40,13 @@ export default function Home() {
         const maps2v2 = mapsPerGameMode["2 vs 2"][0]["maps"];
         const maps3v3 = mapsPerGameMode["3 vs 3"][0]["maps"];
         const maps4v4 = mapsPerGameMode["4 vs 4"][0]["maps"];
+        const mapsAllTheRandoms1v1 =
+          mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
         setMaps1v1(maps1v1);
         setMaps2v2(maps2v2);
         setMaps3v3(maps3v3);
         setMaps4v4(maps4v4);
+        setMapsAllTheRandoms1v1(mapsAllTheRandoms1v1);
 
         const newMapPools = [
           {
@@ -58,6 +65,10 @@ export default function Home() {
             name: "W3Champions (4v4)",
             maps: maps4v4,
           },
+          {
+            name: "W3Champions (All The Randoms 1v1)",
+            maps: mapsAllTheRandoms1v1,
+          },
         ];
 
         setMapPools(newMapPools);
@@ -75,14 +86,15 @@ export default function Home() {
     setMaps2v2,
     setMaps3v3,
     setMaps4v4,
+    setMapsAllTheRandoms1v1,
   ]);
 
   return (
     <>
       <h1>Map Veto Tool</h1>
-      <p>Choose a map pool.</p>
 
       {/* Map Pool Selection */}
+      <p>Choose a map pool.</p>
       {maps1v1.length && !isPending ? (
         <select>
           {mapPools.map((map: unknown) => (
@@ -92,10 +104,20 @@ export default function Home() {
           ))}
         </select>
       ) : null}
+      {isPending ? <Loading /> : null}
+
+      {/* Player Names */}
+      <div className="flex-column mt-2 mb-1">
+        <p>Player Names (or BattleTags):</p>
+        <input type="text" placeholder="Host name" />
+        <input type="text" placeholder="Opponent name" />
+      </div>
+
+      {/* Action Buttons */}
+      <button>Launch Lobby</button>
 
       {/* Feedback */}
       {!maps1v1.length && !isPending ? <ErrorHint /> : null}
-      {isPending ? <Loading /> : null}
     </>
   );
 }
