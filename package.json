@@ -19,16 +19,13 @@
     "react-hot-toast": "^2.4.1",
     "sakura.css": "^1.5.0",
     "sass": "^1.80.2",
-    "uniqid": "^5.4.0",
-    "uuid": "^10.0.0"
+    "short-uuid": "^5.2.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/uniqid": "^5.3.4",
-    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.15",
     "typescript": "^5"

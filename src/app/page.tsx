@@ -11,8 +11,8 @@ import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
-import uniqid from "uniqid";
-import { v4 as uuidv4 } from "uuid";
+import short from 'short-uuid';
+
 
 export default function Home() {
   const router = useRouter();
@@ -72,9 +72,9 @@ export default function Home() {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const newLobbyID = uuidv4();
-    const p1ID = uuidv4();
-    const p2ID = uuidv4();
+    const newLobbyID = short.generate();
+    const p1ID = short.generate();
+    const p2ID = short.generate();
     const p1Name = formData.get("p1Name") as string;
     const p2Name = formData.get("p2Name") as string;
     const mapPoolName = formData.get("mapPool") as string;
@@ -106,7 +106,7 @@ export default function Home() {
       })
       .then(() => {
         localStorage.setItem("w3veto-playerID", p1ID);
-        router.push(`/lobby/${newLobbyID}`);
+        router.push(`/lobby/${newLobbyID}?p2ID=${p2ID}`);
       })
       .catch((err) => {
         console.error(err);
@@ -135,7 +135,7 @@ export default function Home() {
       {mapPools.length && !isPending ? (
         <select required name="mapPool">
           {mapPools.map((map) => (
-            <option key={uniqid()} value={map.name}>
+            <option key={short.generate()} value={map.name}>
               {map.name}
             </option>
           ))}
