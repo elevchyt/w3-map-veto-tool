@@ -4,6 +4,7 @@ import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
+import { LobbyType, MapPoolType } from "@/types/types";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
@@ -71,11 +72,23 @@ export default function Home() {
 
     const formData = new FormData(e.target as HTMLFormElement);
     const newLobbyID = uniqid();
-    const p1Name = formData.get("p1Name") as string;
-    const p2Name = formData.get("p2Name") as string;
+    const p1 = formData.get("p1Name") as string;
+    const p2 = formData.get("p2Name") as string;
+    const mapPoolName = formData.get("mapPool") as string;
+    let mapPool = mapPools.find((pool) => pool.name === mapPoolName);
+    mapPool = setupMapPool(mapPool);
+    if (!mapPool) return;
+
+    const newLobbyPayload: LobbyType = {
+      p1,
+      p2,
+      maps: mapPool.maps,
+      isBanning: false,
+      activePlayer: p1,
+    };
 
     toast
-      .promise(createLobby(newLobbyID, p1Name, p2Name), {
+      .promise(createLobby(newLobbyID, newLobbyPayload), {
         loading: "Creating your lobby...",
         success: <b>Lobby created successfully!</b>,
         error: <b>Error creating lobby 😥</b>,
@@ -88,15 +101,19 @@ export default function Home() {
       });
   };
 
-  const createLobby = (
-    newLobbyID: string,
-    p1Name: string, // P1 is the HOST!
-    p2Name: string
-  ) => {
-    return set(ref(db, `/lobbies/${newLobbyID}`), {
-      p1Name,
-      p2Name,
-    });
+  const createLobby = (newLobbyID: string, payload: LobbyType) => {
+    return set(ref(db, `/lobbies/${newLobbyID}`), payload);
+  };
+
+  // Mutate the selected map pool so that each map entry has isBannedBy & isPickedBy properties
+  const setupMapPool = (mapPool: MapPoolType | undefined) => {
+    if (!mapPool) return;
+    mapPool.maps = mapPool.maps.map((map) => ({
+      ...map,
+      isBannedBy: "",
+      isPickedBy: "",
+    }));
+    return mapPool;
   };
 
   return (
