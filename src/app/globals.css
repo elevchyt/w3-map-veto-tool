@@ -307,7 +307,7 @@ fieldset {
   display: flex;
 }
 
-.generic-button {
+.submit-button {
   transition: 0.2s all;
 
   &:disabled {

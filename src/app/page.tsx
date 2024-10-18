@@ -11,8 +11,7 @@ import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
-import short from 'short-uuid';
-
+import short from "short-uuid";
 
 export default function Home() {
   const router = useRouter();
@@ -105,8 +104,7 @@ export default function Home() {
         error: <b>Error creating lobby 😥</b>,
       })
       .then(() => {
-        localStorage.setItem("w3veto-playerID", p1ID);
-        router.push(`/lobby/${newLobbyID}?p2ID=${p2ID}`);
+        router.push(`/lobby/${newLobbyID}?setP1=${p1ID}&p2ID=${p2ID}`);
       })
       .catch((err) => {
         console.error(err);
@@ -157,7 +155,7 @@ export default function Home() {
 
       {/* Action Buttons */}
       <button
-        className="generic-button"
+        className="submit-button"
         type="submit"
         disabled={isPending || !mapPools.length}
       >

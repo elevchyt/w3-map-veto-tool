@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import "react-tippy/dist/tippy.css";
 
 export const metadata: Metadata = {
   title: "W3 Map Veto Tool",

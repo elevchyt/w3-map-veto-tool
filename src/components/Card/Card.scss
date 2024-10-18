@@ -1,0 +1,42 @@
+.card-container {
+  width: 22rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 0.5rem;
+  background-color: #4a4a4a;
+  padding: 0.5rem;
+  filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.15));
+  transition: all 0.2s ease-in-out;
+
+  &.banned {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  &.picked {
+    pointer-events: none;
+    filter: drop-shadow(0px 4px 8px rgba(209, 192, 38, 1));
+  }
+}
+
+.action-button {
+  transition: 0.2s all;
+
+  &:disabled {
+    color: gray;
+    background-color: lightgray;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
