@@ -97,7 +97,7 @@ export default function Home() {
       <p>Choose a map pool:</p>
       {mapPools.length && !isPending ? (
         <select required name="mapPool">
-          {mapPools.map((map: unknown) => (
+          {mapPools.map((map) => (
             <option key={map.id} value={map.name}>
               {map.name}
             </option>

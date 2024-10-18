@@ -18,7 +18,8 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "sakura.css": "^1.5.0",
-    "sass": "^1.80.2"
+    "sass": "^1.80.2",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.11",

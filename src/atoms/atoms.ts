@@ -1,8 +1,13 @@
 import { atom } from "jotai";
 
-type MapPoolType = {
+export type MapPoolType = {
     name: string;
-    maps: unknown[];
+    maps: MapType[];
+};
+
+export type MapType = {
+    id: number;
+    name: string;
 };
 
 export const maps1v1Atom = atom<unknown[]>([]);
