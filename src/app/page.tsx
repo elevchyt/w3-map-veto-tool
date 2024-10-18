@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
 import uniqid from "uniqid";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   const router = useRouter();
@@ -71,20 +72,30 @@ export default function Home() {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    const newLobbyID = uniqid();
-    const p1 = formData.get("p1Name") as string;
-    const p2 = formData.get("p2Name") as string;
+    const newLobbyID = uuidv4();
+    const p1ID = uuidv4();
+    const p2ID = uuidv4();
+    const p1Name = formData.get("p1Name") as string;
+    const p2Name = formData.get("p2Name") as string;
     const mapPoolName = formData.get("mapPool") as string;
     let mapPool = mapPools.find((pool) => pool.name === mapPoolName);
     mapPool = setupMapPool(mapPool);
     if (!mapPool) return;
 
     const newLobbyPayload: LobbyType = {
-      p1,
-      p2,
+      p1: {
+        id: p1ID,
+        name: p1Name,
+        isBanning: false,
+        isPicking: false,
+      },
+      p2: {
+        id: p2ID,
+        name: p2Name,
+        isBanning: false,
+        isPicking: false,
+      },
       maps: mapPool.maps,
-      isBanning: false,
-      activePlayer: p1,
     };
 
     toast
@@ -94,6 +105,7 @@ export default function Home() {
         error: <b>Error creating lobby 😥</b>,
       })
       .then(() => {
+        localStorage.setItem("w3veto-playerID", p1ID);
         router.push(`/lobby/${newLobbyID}`);
       })
       .catch((err) => {

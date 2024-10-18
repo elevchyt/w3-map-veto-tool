@@ -10,10 +10,14 @@ export type MapPoolType = {
   maps: MapType[];
 };
 
+type PlayerType = {
+  id: string;
+  name: string;
+  isBanning: boolean;
+  isPicking: boolean;
+};
 export type LobbyType = {
-  p1: string;
-  p2: string;
-  activePlayer: string;
-  isBanning?: boolean;
+  p1: PlayerType;
+  p2: PlayerType;
   maps: MapType[];
 };
