@@ -7,6 +7,7 @@ import { useAtom } from "jotai";
 import _ from "lodash";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
+import uniqid from "uniqid";
 
 export default function Home() {
   const [isPending, setIsPending] = useAtom(isPendingAtom);
@@ -61,7 +62,7 @@ export default function Home() {
       });
   }, [setIsPending, setMapPools]);
 
-  const launchLobby = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
@@ -92,13 +93,13 @@ export default function Home() {
   };
 
   return (
-    <form onSubmit={launchLobby}>
+    <form onSubmit={handleSubmit}>
       {/* Map Pool Selection */}
       <p>Choose a map pool:</p>
       {mapPools.length && !isPending ? (
         <select required name="mapPool">
           {mapPools.map((map) => (
-            <option key={map.id} value={map.name}>
+            <option key={uniqid()} value={map.name}>
               {map.name}
             </option>
           ))}
