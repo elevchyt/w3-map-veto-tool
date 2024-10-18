@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "jotai": "^2.10.1",
+    "lodash": "^4.17.21",
     "next": "14.2.15",
     "normalize.css": "^8.0.1",
     "react": "^18",
@@ -17,6 +19,7 @@
     "sass": "^1.80.2"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.11",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
