@@ -19,6 +19,7 @@ body {
   color: #c9c9c9;
   background-color: #222222;
   padding: 13px;
+  user-select: none;
 }
 
 @media (max-width: 684px) {
@@ -300,4 +301,24 @@ fieldset {
 
 .flex {
   display: flex;
+}
+
+.generic-button {
+  transition: 0.2s all;
+
+  &:disabled {
+    color: gray;
+    background-color: lightgray;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateX(-2px);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
