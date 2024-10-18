@@ -3,13 +3,17 @@
 import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
+import { db } from "@/firebase/firebase";
+import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
+import { useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
 import uniqid from "uniqid";
 
 export default function Home() {
+  const router = useRouter();
   const [isPending, setIsPending] = useAtom(isPendingAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
 
@@ -66,29 +70,32 @@ export default function Home() {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
-    console.log(formData.get("mapPool"));
-    console.log(formData.get("hostName"));
-    console.log(formData.get("opponentName"));
+    const newLobbyID = uniqid();
+    const p1Name = formData.get("p1Name") as string;
+    const p2Name = formData.get("p2Name") as string;
 
-    toast.promise(createLobby(), {
-      loading: "Creating your lobby...",
-      success: <b>Lobby created successfully!</b>,
-      error: <b>Error creating lobby 😥</b>,
-    });
+    toast
+      .promise(createLobby(newLobbyID, p1Name, p2Name), {
+        loading: "Creating your lobby...",
+        success: <b>Lobby created successfully!</b>,
+        error: <b>Error creating lobby 😥</b>,
+      })
+      .then(() => {
+        router.push(`/lobby/${newLobbyID}`);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
-  const createLobby = () => {
-    // Fake temporary promise!
-    return new Promise((resolve, reject) => {
-      // Simulate a network request delay
-      setTimeout(() => {
-        const success = Math.random() > 0.5; // Randomly decide if it succeeds or fails
-        if (success) {
-          resolve("Lobby created successfully!");
-        } else {
-          reject("Error creating the lobby. 😥");
-        }
-      }, 1000); // 1-second delay for simulation
+  const createLobby = (
+    newLobbyID: string,
+    p1Name: string, // P1 is the HOST!
+    p2Name: string
+  ) => {
+    return set(ref(db, `/lobbies/${newLobbyID}`), {
+      p1Name,
+      p2Name,
     });
   };
 
@@ -110,13 +117,13 @@ export default function Home() {
       {/* Player Names */}
       <div className="flex-column mt-2 mb-1">
         <p>Player Names (or BattleTags):</p>
-        <input required name="hostName" type="text" placeholder="Host name" />
         <input
           required
-          name="opponentName"
+          name="p1Name"
           type="text"
-          placeholder="Opponent name"
+          placeholder="Player 1 Name (Host)"
         />
+        <input required name="p2Name" type="text" placeholder="Player 2 Name" />
       </div>
 
       {/* Action Buttons */}
