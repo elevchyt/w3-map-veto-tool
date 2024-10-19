@@ -13,6 +13,7 @@ export type MapType = {
   name: string;
   isBannedBy?: string;
   isPickedBy?: string;
+  isStartingMap: boolean;
 };
 
 export type MapPoolType = {

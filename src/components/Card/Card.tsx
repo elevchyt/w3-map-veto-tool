@@ -13,16 +13,21 @@ type PropsType = MapType & {
 
 export default function Card(props: PropsType) {
   return (
-    <div className={`card-container ${props.isBannedBy ? "banned" : ""}  ${props.isPickedBy ? "picked" : ""}`}>
+    <div
+      className={`card-container ${props.isBannedBy ? "banned" : ""}  ${
+        props.isPickedBy ? "picked" : ""
+      }  ${props.isStartingMap ? "starting" : ""}`}
+    >
       <p>{props.name}</p>
 
       {props.isBannedBy ? <small>Banned by: {props.isBannedBy}</small> : null}
       {props.isPickedBy ? <small>Picked by: {props.isPickedBy}</small> : null}
+      {props.isStartingMap ? <small>Starting map</small> : null}
 
       {/* MAP IMAGE GOES HERE */}
 
       {/* Actions */}
-      {!props.isBannedBy && !props.isPickedBy ? (
+      {!props.isBannedBy && !props.isPickedBy && !props.isStartingMap ? (
         <>
           {props.enableBanAction ? (
             <button
