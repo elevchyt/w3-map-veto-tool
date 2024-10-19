@@ -170,7 +170,7 @@ export default function Lobby() {
             name={map.name}
             isBannedBy={getPlayerFromID(map.isBannedBy, lobbyData)}
             isPickedBy={getPlayerFromID(map.isPickedBy, lobbyData)}
-            isStartingMap={true}
+            isStartingMap={false} // TODO
             enableBanAction={getCurrentPlayerAction() === ActionTypeEnum.BAN}
             enablePickAction={getCurrentPlayerAction() === ActionTypeEnum.PICK}
             handleBan={handleBan}
