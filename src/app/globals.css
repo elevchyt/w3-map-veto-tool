@@ -272,6 +272,33 @@ fieldset {
 }
 
 /* Custom global styles */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+
+  h1 {
+    margin: 0;
+  }
+
+  .links {
+    margin-left: auto;
+  }
+
+  .button-link {
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      opacity: 0.5;
+    }
+    &:active {
+      transform: scale(0.8);
+    }
+  }
+}
+
 .mt-1 {
   margin-top: 1rem;
 }
@@ -325,11 +352,11 @@ fieldset {
 ::-webkit-scrollbar {
   width: 1em;
 }
- 
+
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
- 
+
 ::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
