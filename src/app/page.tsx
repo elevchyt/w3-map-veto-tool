@@ -85,7 +85,6 @@ export default function Home() {
         const maps4v4w3c = mapsPerGameMode["4 vs 4"][0]["maps"];
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
-        console.log(maps1v1w3c);
         const mapsGNLS15 = mapsPerGameMode["1 vs 1"][0]["maps"].filter(
           (map: MapType) => {
             const threshold = 0.7;
