@@ -163,7 +163,9 @@ export default function Home() {
     let pickBanOrder: OrderType[] = [];
     if (pickBanMode === PickBanModeEnum.AB) {
       pickBanOrder = mapPool.maps.map((map, index) => {
-        const playerID = index % 2 === 0 ? p1ID : p2ID;
+        let playerID = index % 2 === 0 ? p1ID : p2ID;
+        if (index === mapPool.maps.length - 1) playerID = p2ID;
+        else if (index === mapPool.maps.length - 2) playerID = p1ID;
         return {
           id: playerID,
           done: false,
@@ -175,7 +177,7 @@ export default function Home() {
       });
     } else if (pickBanMode === PickBanModeEnum.AABB) {
       pickBanOrder = mapPool.maps.map((map, index) => {
-        const playerID =
+        let playerID =
           index === mapPool.maps.length - 2
             ? p1ID
             : index === mapPool.maps.length - 1
@@ -183,6 +185,8 @@ export default function Home() {
             : Math.floor(index / 2) % 2 === 0
             ? p1ID
             : p2ID;
+        if (index === mapPool.maps.length - 1) playerID = p2ID;
+        else if (index === mapPool.maps.length - 2) playerID = p1ID;
         return {
           id: playerID,
           done: false,
@@ -231,6 +235,7 @@ export default function Home() {
             ))}
           </select>
         ) : null}
+        {isPending ? <Loading /> : null}
 
         {/* Pick/Ban Mode */}
         <Tooltip
@@ -247,7 +252,6 @@ export default function Home() {
             ))}
           </select>
         </Tooltip>
-        {isPending ? <Loading /> : null}
       </div>
 
       {/* Map Pool Options */}
