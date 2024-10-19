@@ -28,6 +28,7 @@ export default function Home() {
   const [isLoadingLobby, setIsLoadingLobby] = useState(false);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
   const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
+  const [selectedPickBanOrder, setSelectedPickBanOrder] = useState("");
   const [selectedMapPool, setSelectedMapPool] = useState<MapPoolType>({
     name: "",
     maps: [],
@@ -245,7 +246,14 @@ export default function Home() {
             trigger="mouseenter"
             theme="light"
           >
-            <select required name="pickBanMode">
+            <select
+              required
+              name="pickBanMode"
+              value={selectedPickBanOrder}
+              onChange={(e) => {
+                setSelectedPickBanOrder(e.target.value);
+              }}
+            >
               {pickBanModes.map((mode) => (
                 <option key={short.generate()} value={mode}>
                   {mode}
