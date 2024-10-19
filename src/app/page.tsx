@@ -211,74 +211,84 @@ export default function Home() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {/* Map Pool Selection */}
-      <p>Choose a map pool:</p>
-      <div className="map-pool-selection">
-        {mapPools.length && !isPending ? (
-          <select
-            required
-            name="mapPool"
-            value={selectedMapPoolName}
-            onChange={(e) => {
-              setSelectedMapPoolName(e.target.value);
-              const selectedPool = mapPools.find(
-                (pool) => pool.name === e.target.value
-              );
-              if (selectedPool) setSelectedMapPool(selectedPool);
-            }}
+    <>
+      <form onSubmit={handleSubmit}>
+        {/* Map Pool Selection */}
+        <p>Choose a map pool:</p>
+        <div className="map-pool-selection">
+          {mapPools.length && !isPending ? (
+            <select
+              required
+              name="mapPool"
+              value={selectedMapPoolName}
+              onChange={(e) => {
+                setSelectedMapPoolName(e.target.value);
+                const selectedPool = mapPools.find(
+                  (pool) => pool.name === e.target.value
+                );
+                if (selectedPool) setSelectedMapPool(selectedPool);
+              }}
+            >
+              {mapPools.map((map) => (
+                <option key={short.generate()} value={map.name}>
+                  {map.name}
+                </option>
+              ))}
+            </select>
+          ) : null}
+          {isPending ? <Loading /> : null}
+
+          {/* Pick/Ban Mode */}
+          <Tooltip
+            title="Banning Order"
+            position="top"
+            trigger="mouseenter"
+            theme="light"
           >
-            {mapPools.map((map) => (
-              <option key={short.generate()} value={map.name}>
-                {map.name}
-              </option>
-            ))}
-          </select>
-        ) : null}
-        {isPending ? <Loading /> : null}
+            <select required name="pickBanMode">
+              {pickBanModes.map((mode) => (
+                <option key={short.generate()} value={mode}>
+                  {mode}
+                </option>
+              ))}
+            </select>
+          </Tooltip>
+        </div>
 
-        {/* Pick/Ban Mode */}
-        <Tooltip
-          title="Banning Order"
-          position="top"
-          trigger="mouseenter"
-          theme="light"
-        >
-          <select required name="pickBanMode">
-            {pickBanModes.map((mode) => (
-              <option key={short.generate()} value={mode}>
-                {mode}
-              </option>
-            ))}
-          </select>
-        </Tooltip>
-      </div>
-
-      {/* Map Pool Options */}
-      <MapPoolOptionsModal maps={selectedMapPool?.maps} toggleMap={toggleMap} />
-
-      {/* Player Names */}
-      <div className="flex-column mt-2 mb-1">
-        <p>Player Names (or BattleTags):</p>
-        <input
-          required
-          name="p1Name"
-          type="text"
-          placeholder="Player 1 Name (Host)"
+        {/* Map Pool Options */}
+        <MapPoolOptionsModal
+          maps={selectedMapPool?.maps}
+          toggleMap={toggleMap}
         />
-        <input required name="p2Name" type="text" placeholder="Player 2 Name" />
-      </div>
 
-      {/* Action Buttons */}
-      <button
-        className="generic-button"
-        type="submit"
-        disabled={isPending || isLoadingLobby || !mapPools.length}
-      >
-        Launch Lobby
-      </button>
-      {/* Feedback */}
-      {!mapPools.length && !isPending ? <ErrorHint /> : null}
-    </form>
+        {/* Player Names */}
+        <div className="flex-column mt-2 mb-1">
+          <p>Player Names (or BattleTags):</p>
+          <input
+            required
+            name="p1Name"
+            type="text"
+            placeholder="Player 1 Name (Host)"
+          />
+          <input
+            required
+            name="p2Name"
+            type="text"
+            placeholder="Player 2 Name"
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <button
+          className="generic-button"
+          type="submit"
+          disabled={isPending || isLoadingLobby || !mapPools.length}
+        >
+          Launch Lobby
+        </button>
+        {/* Feedback */}
+        {!mapPools.length && !isPending ? <ErrorHint /> : null}
+      </form>
+    </>
   );
 }
