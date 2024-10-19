@@ -25,6 +25,7 @@ import { Tooltip } from "react-tippy";
 export default function Home() {
   const router = useRouter();
   const [isPending, setIsPending] = useAtom(isPendingAtom);
+  const [isLoadingLobby, setIsLoadingLobby] = useState(false);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
   const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
   const [selectedMapPool, setSelectedMapPool] = useState<MapPoolType>({
@@ -118,6 +119,7 @@ export default function Home() {
       order: pickBanOrder,
     };
 
+    setIsLoadingLobby(true);
     toast
       .promise(createLobby(newLobbyID, newLobbyPayload), {
         loading: "Creating your lobby...",
@@ -129,6 +131,9 @@ export default function Home() {
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setIsLoadingLobby(false);
       });
   };
 
@@ -264,11 +269,10 @@ export default function Home() {
       <button
         className="submit-button"
         type="submit"
-        disabled={isPending || !mapPools.length}
+        disabled={isPending || isLoadingLobby || !mapPools.length}
       >
         Launch Lobby
       </button>
-
       {/* Feedback */}
       {!mapPools.length && !isPending ? <ErrorHint /> : null}
     </form>
