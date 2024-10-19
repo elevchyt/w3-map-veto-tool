@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
-import "react-tippy/dist/tippy.css";
 import Footer from "@/components/Footer/Footer";
 import NavLinks from "@/components/NavLinks";
 
