@@ -1,0 +1,45 @@
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid rgba(255, 255, 255, 0.192);
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+
+  p {
+    opacity: 0.25;
+    margin: 1rem 0;
+    font-size: 1.4rem;
+  }
+
+  img {
+    margin: 0;
+    transition: all 0.25s;
+
+    &:hover {
+      transform: rotate(3deg);
+    }
+    &:active {
+      opacity: 0.25;
+    }
+  }
+
+  .github {
+    cursor: pointer;
+    transform-origin: center;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 0.5;
+    }
+    &:active {
+      transform: scale(0.5);
+    }
+  }
+}
