@@ -3,6 +3,11 @@ export enum ActionTypeEnum {
   PICK = "Picking",
 }
 
+export enum PickBanModeEnum {
+  AB = "A-B",
+  AABB = "A-A-B-B",
+}
+
 export type MapType = {
   id: number;
   name: string;
@@ -20,7 +25,7 @@ type PlayerType = {
   name: string;
 };
 
-type OrderType = {
+export type OrderType = {
   id: string;
   done: boolean;
   actionType: ActionTypeEnum;

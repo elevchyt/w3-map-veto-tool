@@ -14,11 +14,13 @@
 
   &.banned {
     opacity: 0.25;
+    border: 1px solid rgb(247, 14, 14);
     pointer-events: none;
   }
   &.picked {
     pointer-events: none;
-    filter: drop-shadow(0px 4px 8px rgba(255, 255, 255, 0.15));
+    border: 1px solid rgb(14, 247, 14);
+    filter: drop-shadow(0px 0px 24px rgba(255, 255, 255, 0.25));
   }
 }
 

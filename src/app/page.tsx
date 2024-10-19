@@ -4,7 +4,13 @@ import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
-import { ActionTypeEnum, LobbyType, MapPoolType } from "@/types/types";
+import {
+  ActionTypeEnum,
+  LobbyType,
+  MapPoolType,
+  OrderType,
+  PickBanModeEnum,
+} from "@/types/types";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
@@ -12,18 +18,21 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect } from "react";
 import toast from "react-hot-toast";
 import short from "short-uuid";
+import "./page.scss";
 
 export default function Home() {
   const router = useRouter();
   const [isPending, setIsPending] = useAtom(isPendingAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
 
-  const w3championsLadderDataURL =
+  const pickBanModes = [PickBanModeEnum.AB, PickBanModeEnum.AABB];
+
+  const w3championsLadderMapsDataURL =
     "https://website-backend.w3champions.com/api/ladder/active-modes";
 
   useEffect(() => {
     setIsPending(true);
-    fetch(w3championsLadderDataURL)
+    fetch(w3championsLadderMapsDataURL)
       .then((res) => res.json())
       .then((data) => {
         const mapsPerGameMode = _.groupBy(data, "name");
@@ -76,53 +85,40 @@ export default function Home() {
     const p2ID = short.generate();
     const p1Name = formData.get("p1Name") as string;
     const p2Name = formData.get("p2Name") as string;
+    const pickBanMode = formData.get("pickBanMode") as string;
     const mapPoolName = formData.get("mapPool") as string;
     let mapPool = mapPools.find((pool) => pool.name === mapPoolName);
     mapPool = setupMapPool(mapPool);
     if (!mapPool) return;
 
-    const gnlOrder = [
-      {
-        id: p1ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p2ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p1ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p2ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p1ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p2ID,
-        done: false,
-        actionType: ActionTypeEnum.BAN,
-      },
-      {
-        id: p1ID,
-        done: false,
-        actionType: ActionTypeEnum.PICK,
-      },
-      {
-        id: p2ID,
-        done: false,
-        actionType: ActionTypeEnum.PICK,
-      },
-    ];
+    let pickBanOrder: OrderType[] = [];
+    if (pickBanMode === PickBanModeEnum.AB) {
+      pickBanOrder = mapPool.maps.map((map, index) => {
+        const playerID = index % 2 === 0 ? p2ID : p1ID;
+        return {
+          id: playerID,
+          done: false,
+          actionType:
+            index < mapPool.maps.length - 2
+              ? ActionTypeEnum.BAN
+              : ActionTypeEnum.PICK,
+        };
+      });
+    } else if (pickBanMode === PickBanModeEnum.AABB) {
+      pickBanOrder = mapPool.maps.map((map, index) => {
+        const playerID =
+          index === mapPool.maps.length - 2 ? p1ID : index === mapPool.maps.length - 1 ? p2ID : Math.floor(index / 2) % 2 === 0 ? p1ID : p2ID;
+        return {
+          id: playerID,
+          done: false,
+          actionType:
+            index < mapPool.maps.length - 2
+              ? ActionTypeEnum.BAN
+              : ActionTypeEnum.PICK,
+        };
+      });
+    }
+    console.log(pickBanOrder);
 
     const newLobbyPayload: LobbyType = {
       p1: {
@@ -134,7 +130,7 @@ export default function Home() {
         name: p2Name,
       },
       maps: mapPool.maps,
-      order: gnlOrder,
+      order: pickBanOrder,
     };
 
     toast
@@ -170,16 +166,27 @@ export default function Home() {
     <form onSubmit={handleSubmit}>
       {/* Map Pool Selection */}
       <p>Choose a map pool:</p>
-      {mapPools.length && !isPending ? (
-        <select required name="mapPool">
-          {mapPools.map((map) => (
-            <option key={short.generate()} value={map.name}>
-              {map.name}
+      <div className="map-pool-selection">
+        {mapPools.length && !isPending ? (
+          <select required name="mapPool">
+            {mapPools.map((map) => (
+              <option key={short.generate()} value={map.name}>
+                {map.name}
+              </option>
+            ))}
+          </select>
+        ) : null}
+
+        {/* Pick/Ban Mode */}
+        <select required name="pickBanMode">
+          {pickBanModes.map((mode) => (
+            <option key={short.generate()} value={mode}>
+              {mode}
             </option>
           ))}
         </select>
-      ) : null}
-      {isPending ? <Loading /> : null}
+        {isPending ? <Loading /> : null}
+      </div>
 
       {/* Player Names */}
       <div className="flex-column mt-2 mb-1">
