@@ -85,39 +85,14 @@ export default function Home() {
     const p2ID = short.generate();
     const p1Name = formData.get("p1Name") as string;
     const p2Name = formData.get("p2Name") as string;
-    const pickBanMode = formData.get("pickBanMode") as string;
+    const pickBanMode = formData.get("pickBanMode") as PickBanModeEnum;
     const mapPoolName = formData.get("mapPool") as string;
     let mapPool = mapPools.find((pool) => pool.name === mapPoolName);
     mapPool = setupMapPool(mapPool);
     if (!mapPool) return;
 
-    let pickBanOrder: OrderType[] = [];
-    if (pickBanMode === PickBanModeEnum.AB) {
-      pickBanOrder = mapPool.maps.map((map, index) => {
-        const playerID = index % 2 === 0 ? p2ID : p1ID;
-        return {
-          id: playerID,
-          done: false,
-          actionType:
-            index < mapPool.maps.length - 2
-              ? ActionTypeEnum.BAN
-              : ActionTypeEnum.PICK,
-        };
-      });
-    } else if (pickBanMode === PickBanModeEnum.AABB) {
-      pickBanOrder = mapPool.maps.map((map, index) => {
-        const playerID =
-          index === mapPool.maps.length - 2 ? p1ID : index === mapPool.maps.length - 1 ? p2ID : Math.floor(index / 2) % 2 === 0 ? p1ID : p2ID;
-        return {
-          id: playerID,
-          done: false,
-          actionType:
-            index < mapPool.maps.length - 2
-              ? ActionTypeEnum.BAN
-              : ActionTypeEnum.PICK,
-        };
-      });
-    }
+    const pickBanOrder = getPickBanModeOrder(pickBanMode, mapPool, p1ID, p2ID);
+
     console.log(pickBanOrder);
 
     const newLobbyPayload: LobbyType = {
@@ -160,6 +135,48 @@ export default function Home() {
       isPickedBy: "",
     }));
     return mapPool;
+  };
+
+  const getPickBanModeOrder = (
+    pickBanMode: PickBanModeEnum,
+    mapPool: MapPoolType,
+    p1ID: string,
+    p2ID: string
+  ): OrderType[] => {
+    let pickBanOrder: OrderType[] = [];
+    if (pickBanMode === PickBanModeEnum.AB) {
+      pickBanOrder = mapPool.maps.map((map, index) => {
+        const playerID = index % 2 === 0 ? p1ID : p2ID;
+        return {
+          id: playerID,
+          done: false,
+          actionType:
+            index < mapPool.maps.length - 2
+              ? ActionTypeEnum.BAN
+              : ActionTypeEnum.PICK,
+        };
+      });
+    } else if (pickBanMode === PickBanModeEnum.AABB) {
+      pickBanOrder = mapPool.maps.map((map, index) => {
+        const playerID =
+          index === mapPool.maps.length - 2
+            ? p1ID
+            : index === mapPool.maps.length - 1
+            ? p2ID
+            : Math.floor(index / 2) % 2 === 0
+            ? p1ID
+            : p2ID;
+        return {
+          id: playerID,
+          done: false,
+          actionType:
+            index < mapPool.maps.length - 2
+              ? ActionTypeEnum.BAN
+              : ActionTypeEnum.PICK,
+        };
+      });
+    }
+    return pickBanOrder;
   };
 
   return (
