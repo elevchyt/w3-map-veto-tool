@@ -11,6 +11,7 @@ export enum PickBanModeEnum {
 export type MapType = {
   id: number;
   name: string;
+  w3infoImageURL?: string;
   isBannedBy?: string;
   isPickedBy?: string;
   isExcluded?: boolean;

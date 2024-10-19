@@ -20,7 +20,6 @@ export default function RootLayout({
         <Toaster />
         <h1>Map Veto Tool</h1>
         {children}
-        <div className="spacer" />
         <Footer />
       </body>
     </html>

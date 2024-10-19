@@ -23,7 +23,7 @@ export default function MapPoolOptionsModal(props: PropsType) {
   return (
     <div>
       <button className="generic-button" type="button" onClick={openModal}>
-        Map Pool Settings
+        Map Pool Options
       </button>
 
       <dialog ref={dialogRef}>

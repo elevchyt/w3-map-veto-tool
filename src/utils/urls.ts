@@ -5,7 +5,7 @@ export const w3championsLadderMapsDataURL =
 // This is the warcraft3.info API endpoint to fetch maps data
 // At the moment, we only use it to get the images of each map and
 // fetching it by adding it at the end of their current image hosting domain
-// which is the one stored in the w3InfoMapsDomain constant
-export const warcraft3InfoMapsURL =
-  "https://website-backend.w3champions.com/api/ladder/active-modes";
-export const w3InfoMapsDomain = "https://d3upx5peno0o6w.cloudfront.net";
+// which is the one stored in the w3infoMapImagesURL constant
+export const w3infoMapsURL =
+  "https://warcraft3.info/api/v1/maps";
+export const w3infoMapImagesURL = "https://d3upx5peno0o6w.cloudfront.net";

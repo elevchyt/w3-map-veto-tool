@@ -1,6 +1,6 @@
 "use client";
 
-import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
+import { isPendingAtom, mapPoolsAtom, w3infoMapsDataAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
@@ -21,12 +21,12 @@ import short from "short-uuid";
 import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { Tooltip } from "react-tippy";
-import { w3championsLadderMapsDataURL } from "@/utils/urls";
+import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
 
 export default function Home() {
   const router = useRouter();
-  const [isPending, setIsPending] = useAtom(isPendingAtom);
   const [isLoadingLobby, setIsLoadingLobby] = useState(false);
+  const [isPending, setIsPending] = useAtom(isPendingAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
   const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
   const [selectedPickBanOrder, setSelectedPickBanOrder] = useState("");
@@ -39,10 +39,27 @@ export default function Home() {
 
   useEffect(() => {
     setIsPending(true);
-    fetch(w3championsLadderMapsDataURL)
+    const w3ChampionsDataRequest = fetch(w3championsLadderMapsDataURL)
       .then((res) => res.json())
       .then((data) => {
-        const mapsPerGameMode = _.groupBy(data, "name");
+        return data;
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    const w3infoMapDataRequest = fetch(w3infoMapsURL)
+      .then((res) => res.json())
+      .then((data) => {
+        return data;
+      });
+
+    Promise.all([w3ChampionsDataRequest, w3infoMapDataRequest])
+      .then((res) => {
+        console.log("-> All data requests were successful! 😁");
+        const w3cRes = res[0];
+        const w3infoRes = res[1];
+
+        const mapsPerGameMode = _.groupBy(w3cRes, "name");
         const maps1v1 = mapsPerGameMode["1 vs 1"][0]["maps"];
         const maps2v2 = mapsPerGameMode["2 vs 2"][0]["maps"];
         const maps3v3 = mapsPerGameMode["3 vs 3"][0]["maps"];
