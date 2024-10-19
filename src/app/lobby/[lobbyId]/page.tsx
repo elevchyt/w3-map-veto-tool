@@ -166,6 +166,7 @@ export default function Lobby() {
             key={map.id}
             id={map.id}
             name={map.name}
+            image={map.image}
             isBannedBy={getPlayerFromID(map.isBannedBy, lobbyData)}
             isPickedBy={getPlayerFromID(map.isPickedBy, lobbyData)}
             enableBanAction={getCurrentPlayerAction() === ActionTypeEnum.BAN}

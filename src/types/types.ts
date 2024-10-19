@@ -8,10 +8,16 @@ export enum PickBanModeEnum {
   AABB = "A-A-B-B",
 }
 
+type ImageData = {
+  file_name: string;
+  width: number;
+  height: number;
+};
+
 export type MapType = {
   id: number;
   name: string;
-  w3infoImageURL?: string;
+  image?: ImageData;
   isBannedBy?: string;
   isPickedBy?: string;
   isExcluded?: boolean;

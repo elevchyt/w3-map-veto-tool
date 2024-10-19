@@ -3,6 +3,8 @@
 import React from "react";
 import "./Card.scss";
 import { MapType } from "@/types/types";
+import { w3infoMapImagesURL } from "@/utils/urls";
+import Image from "next/image";
 
 type PropsType = MapType & {
   enableBanAction?: boolean;
@@ -18,12 +20,23 @@ export default function Card(props: PropsType) {
         props.isPickedBy ? "picked" : ""
       }`}
     >
-      <p>{props.name}</p>
+      <p className="map-name">{props.name}</p>
 
       {props.isBannedBy ? <small>Banned by: {props.isBannedBy}</small> : null}
       {props.isPickedBy ? <small>Picked by: {props.isPickedBy}</small> : null}
+      {!props.isBannedBy && !props.isPickedBy ? <small>-</small> : null}
 
-      {/* MAP IMAGE GOES HERE */}
+      <div className="map-image-container">
+        <Image
+          className="map-image"
+          src={`${w3infoMapImagesURL}/${props.image?.file_name}`}
+          // width={props.image?.width}
+          // height={props.image?.height}
+          width={128}
+          height={128}
+          alt={props.name}
+        />
+      </div>
 
       {/* Actions */}
       {!props.isBannedBy && !props.isPickedBy ? (
