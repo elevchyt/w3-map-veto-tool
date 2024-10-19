@@ -9,7 +9,7 @@ export const getPlayerFromID = (
   return lobbyData.p1.id === id ? lobbyData.p1.name : lobbyData.p2.name;
 };
 
-export function getStringBestMatch(
+export function getMapBestMatchByName(
   name: string,
   candidates: { name: string }[],
   threshold: number = 0.9

@@ -8,6 +8,7 @@ import {
   ActionTypeEnum,
   LobbyType,
   MapPoolType,
+  MapType,
   OrderType,
   PickBanModeEnum,
 } from "@/types/types";
@@ -22,7 +23,9 @@ import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { Tooltip } from "react-tippy";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
-import { getStringBestMatch } from "@/utils/utils";
+import { getMapBestMatchByName } from "@/utils/utils";
+import { GNLS15MapNames } from "@/utils/customMapPools";
+import stringSimilarity from "string-similarity";
 
 export default function Home() {
   const router = useRouter();
@@ -60,10 +63,14 @@ export default function Home() {
         const w3cRes = res[0];
         const w3infoRes = res[1];
 
-        // Add image url to each map by using warcraft3.info's map data
+        // Add image url & map short name to each map by using warcraft3.info's map data
         w3cRes.forEach((item: unknown) => {
           item.maps.forEach((map: unknown) => {
-            const matchingItem = getStringBestMatch(map.name, w3infoRes, 0.7);
+            const matchingItem = getMapBestMatchByName(
+              map.name,
+              w3infoRes,
+              0.7
+            );
             if (matchingItem) {
               map.image = matchingItem.image;
               if (matchingItem.short)
@@ -71,34 +78,49 @@ export default function Home() {
             }
           });
         });
-        const mapsPerGameMode = _.groupBy(w3cRes, "name");
-        const maps1v1 = mapsPerGameMode["1 vs 1"][0]["maps"];
-        const maps2v2 = mapsPerGameMode["2 vs 2"][0]["maps"];
-        const maps3v3 = mapsPerGameMode["3 vs 3"][0]["maps"];
-        const maps4v4 = mapsPerGameMode["4 vs 4"][0]["maps"];
-        const mapsAllTheRandoms1v1 =
+        const mapsPerGameMode = _.groupBy(w3cRes, "name"); // Maps per game mode with all the data we need :)
+        const maps1v1w3c = mapsPerGameMode["1 vs 1"][0]["maps"];
+        const maps2v2w3c = mapsPerGameMode["2 vs 2"][0]["maps"];
+        const maps3v3w3c = mapsPerGameMode["3 vs 3"][0]["maps"];
+        const maps4v4w3c = mapsPerGameMode["4 vs 4"][0]["maps"];
+        const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
+        console.log(maps1v1w3c);
+        const mapsGNLS15 = mapsPerGameMode["1 vs 1"][0]["maps"].filter(
+          (map: MapType) => {
+            const threshold = 0.7;
+            const bestMatch = stringSimilarity.findBestMatch(
+              map.name,
+              GNLS15MapNames
+            );
+            return bestMatch.bestMatch.rating >= threshold;
+          }
+        );
 
         const presetMapPools = [
           {
+            name: "GNL Season 15",
+            maps: mapsGNLS15,
+          },
+          {
             name: "W3Champions (1v1)",
-            maps: maps1v1,
+            maps: maps1v1w3c,
           },
           {
             name: "W3Champions (2v2)",
-            maps: maps2v2,
+            maps: maps2v2w3c,
           },
           {
             name: "W3Champions (3v3)",
-            maps: maps3v3,
+            maps: maps3v3w3c,
           },
           {
             name: "W3Champions (4v4)",
-            maps: maps4v4,
+            maps: maps4v4w3c,
           },
           {
             name: "W3Champions (All The Randoms 1v1)",
-            maps: mapsAllTheRandoms1v1,
+            maps: mapsAllTheRandoms1v1w3c,
           },
         ];
 
