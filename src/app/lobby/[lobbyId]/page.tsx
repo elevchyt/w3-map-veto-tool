@@ -88,12 +88,14 @@ export default function Lobby() {
           trigger="mouseenter"
           theme="light"
         >
-          <MdContentCopy
-            cursor="pointer"
-            onClick={() => {
-              copyP2URL();
-            }}
-          />
+          {p2URL ? (
+            <MdContentCopy
+              cursor="pointer"
+              onClick={() => {
+                copyP2URL();
+              }}
+            />
+          ) : null}
         </Tooltip>
       </div>
 
