@@ -11,7 +11,7 @@ export const getPlayerFromID = (
 
 export function getMapBestMatchByName(
   name: string,
-  candidates: { name: string }[],
+  candidates: { name: string; short?: string; image?: ImageData }[],
   threshold: number = 0.9
 ) {
   const matches = stringSimilarity.findBestMatch(

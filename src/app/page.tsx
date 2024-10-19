@@ -64,17 +64,22 @@ export default function Home() {
         const w3infoRes = res[1];
 
         // Add image url & map short name to each map by using warcraft3.info's map data
-        w3cRes.forEach((item: unknown) => {
+        w3cRes.forEach((item: { maps: unknown[] }) => {
           item.maps.forEach((map: unknown) => {
+            const mapTyped = map as {
+              name: string;
+              short?: string;
+              image?: ImageData;
+            };
             const matchingItem = getMapBestMatchByName(
-              map.name,
+              mapTyped.name,
               w3infoRes,
               0.7
             );
             if (matchingItem) {
-              map.image = matchingItem.image;
+              mapTyped.image = matchingItem.image;
               if (matchingItem.short)
-                map.name = `${map.name} (${matchingItem.short})`;
+                mapTyped.name = `${mapTyped.name} (${matchingItem.short})`;
             }
           });
         });
