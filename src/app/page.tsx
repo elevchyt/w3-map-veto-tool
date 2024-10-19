@@ -21,6 +21,7 @@ import short from "short-uuid";
 import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { Tooltip } from "react-tippy";
+import { w3championsLadderMapsDataURL } from "@/utils/urls";
 
 export default function Home() {
   const router = useRouter();
@@ -35,9 +36,6 @@ export default function Home() {
   });
 
   const pickBanModes = [PickBanModeEnum.AB, PickBanModeEnum.AABB];
-
-  const w3championsLadderMapsDataURL =
-    "https://website-backend.w3champions.com/api/ladder/active-modes";
 
   useEffect(() => {
     setIsPending(true);
