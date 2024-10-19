@@ -1,6 +1,6 @@
 "use client";
 
-import { isPendingAtom, mapPoolsAtom, w3infoMapsDataAtom } from "@/atoms/atoms";
+import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
@@ -22,6 +22,7 @@ import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { Tooltip } from "react-tippy";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
+import { getStringBestMatch } from "@/utils/utils";
 
 export default function Home() {
   const router = useRouter();
@@ -59,6 +60,13 @@ export default function Home() {
         const w3cRes = res[0];
         const w3infoRes = res[1];
 
+        // Add image url to each map by using warcraft3.info's map data
+        w3cRes.forEach((item: unknown) => {
+          item.maps.forEach((map: unknown) => {
+            const matchingItem = getStringBestMatch(map.name, w3infoRes, 0.7);
+            if (matchingItem) map.image = matchingItem.image;
+          });
+        });
         const mapsPerGameMode = _.groupBy(w3cRes, "name");
         const maps1v1 = mapsPerGameMode["1 vs 1"][0]["maps"];
         const maps2v2 = mapsPerGameMode["2 vs 2"][0]["maps"];
