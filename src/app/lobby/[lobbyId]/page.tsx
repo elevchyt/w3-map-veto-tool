@@ -45,7 +45,6 @@ export default function Lobby() {
     const lobbiesRef = ref(db, `/lobbies/${params.lobbyId}`);
     get(lobbiesRef)
       .then((snapshot) => {
-        console.log(snapshot.val());
         setLobbyData(snapshot.val());
       })
       .catch((err) => {
@@ -56,7 +55,6 @@ export default function Lobby() {
     // Establish realtime connection with lobby & get realtime updates
     const unsubscribe = onValue(lobbiesRef, (snapshot) => {
       const updatedLobbyData = snapshot.val();
-      console.log("Lobby data updated in real-time:", updatedLobbyData);
       setLobbyData(updatedLobbyData);
     });
     return () => unsubscribe();

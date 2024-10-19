@@ -1,12 +1,13 @@
 footer {
+  height: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
+  margin-top: 4rem;
   border-top: 1px solid rgba(255, 255, 255, 0.192);
   color: white;
   text-align: center;
