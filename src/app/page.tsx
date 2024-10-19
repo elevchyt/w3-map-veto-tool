@@ -271,7 +271,7 @@ export default function Home() {
 
       {/* Action Buttons */}
       <button
-        className="submit-button"
+        className="generic-button"
         type="submit"
         disabled={isPending || isLoadingLobby || !mapPools.length}
       >
