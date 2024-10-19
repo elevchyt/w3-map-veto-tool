@@ -1,10 +1,10 @@
 "use client";
 
-import { get, ref } from "firebase/database";
+import { get, onValue, ref } from "firebase/database";
 import { db } from "@/firebase/firebase";
 import { useEffect, useState } from "react";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { LobbyType } from "@/types/types";
+import { useParams, useSearchParams } from "next/navigation";
+import { ActionTypeEnum, LobbyType } from "@/types/types";
 import "./page.scss";
 import Card from "@/components/Card/Card";
 import { isPendingAtom } from "@/atoms/atoms";
@@ -14,6 +14,7 @@ import Loading from "@/components/Loading";
 import { MdContentCopy } from "react-icons/md";
 import { Tooltip } from "react-tippy";
 import toast from "react-hot-toast";
+import { getPlayerFromID } from "@/utils/utils";
 
 export default function Lobby() {
   const params = useParams();
@@ -30,7 +31,10 @@ export default function Lobby() {
 
     // If P2 ID exists in search params with key "p2ID", set copy link's setP2 id as that
     const p2ID = searchParams.get("p2ID");
-    if (p2ID) setP2URL(`${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`);
+    if (p2ID)
+      setP2URL(
+        `${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`
+      );
 
     // If P2 ID exists in search params with the key "setP2", set current player's sessions as P2
     const setP2 = searchParams.get("setP2");
@@ -47,6 +51,14 @@ export default function Lobby() {
         console.log(err);
       })
       .finally(() => setIsPending(false));
+
+    // Establish realtime connection with lobby & get realtime updates
+    const unsubscribe = onValue(lobbiesRef, (snapshot) => {
+      const updatedLobbyData = snapshot.val();
+      console.log("Lobby data updated in real-time:", updatedLobbyData);
+      setLobbyData(updatedLobbyData);
+    });
+    return () => unsubscribe();
   }, [params.lobbyId, searchParams, setIsPending]);
 
   const copyP2URL = () => {
@@ -54,9 +66,16 @@ export default function Lobby() {
     toast.success("Copied to clipboard!");
   };
 
-  const getPlayerFromID = (id: string) => {
+  // Gets the first order data that isn't done
+  const getOrderData = () => {
     if (!lobbyData) return;
-    return lobbyData.p1.id === id ? lobbyData.p1.name : lobbyData.p2.name;
+    return lobbyData.order.find((order) => order.done === false);
+  };
+
+  const getCurrentPlayerAction = () => {
+    if (!lobbyData) return;
+    const orderData = getOrderData();
+    if (playerID === orderData?.id) return orderData?.actionType;
   };
 
   return (
@@ -79,8 +98,13 @@ export default function Lobby() {
       </div>
 
       {/* Lobby State */}
-      <small className="mt-3">Viewing as: <b>{getPlayerFromID(playerID)}</b></small>
-      <p className="mt-3">Banning: PLAYER</p>
+      <small className="mt-3">
+        Viewing as: <b>{getPlayerFromID(playerID, lobbyData)}</b>
+      </small>
+      <p className="mt-3">
+        {getOrderData()?.actionType}:{" "}
+        <b>{getPlayerFromID(getOrderData()?.id, lobbyData)}</b>
+      </p>
 
       {/* Maps Grid */}
       <div id="maps-grid">
@@ -89,8 +113,10 @@ export default function Lobby() {
             key={map.id}
             id={map.id}
             name={map.name}
-            isBannedBy={map.isBannedBy}
-            isPickedBy={map.isPickedBy}
+            isBannedBy={getPlayerFromID(map.isBannedBy, lobbyData)}
+            isPickedBy={getPlayerFromID(map.isPickedBy, lobbyData)}
+            enableBanAction={getCurrentPlayerAction() === ActionTypeEnum.BAN}
+            enablePickAction={getCurrentPlayerAction() === ActionTypeEnum.PICK}
           />
         ))}
         {isPending ? <Loading /> : null}

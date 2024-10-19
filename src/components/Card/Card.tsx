@@ -2,7 +2,12 @@ import React from "react";
 import "./Card.scss";
 import { MapType } from "@/types/types";
 
-export default function Card(props: MapType) {
+type PropsType = MapType & {
+  enableBanAction?: boolean;
+  enablePickAction?: boolean;
+};
+
+export default function Card(props: PropsType) {
   return (
     <div className={`card-container ${props.isBannedBy ? "banned" : ""}`}>
       <p>{props.name}</p>
@@ -13,8 +18,16 @@ export default function Card(props: MapType) {
       {/* MAP IMAGE GOES HERE */}
 
       {/* Actions */}
-      <button className="action-button">Ban</button>
-      <button className="action-button">Pick</button>
+      {!props.isBannedBy && !props.isPickedBy ? (
+        <>
+          {props.enableBanAction ? (
+            <button className="action-button">Ban</button>
+          ) : null}
+          {props.enablePickAction ? (
+            <button className="action-button">Pick</button>
+          ) : null}
+        </>
+      ) : null}
     </div>
   );
 }

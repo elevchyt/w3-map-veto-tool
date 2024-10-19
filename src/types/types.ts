@@ -1,3 +1,8 @@
+export enum ActionTypeEnum {
+  BAN = "Banning",
+  PICK = "Picking",
+}
+
 export type MapType = {
   id: number;
   name: string;
@@ -13,11 +18,17 @@ export type MapPoolType = {
 type PlayerType = {
   id: string;
   name: string;
-  isBanning: boolean;
-  isPicking: boolean;
 };
+
+type OrderType = {
+  id: string;
+  done: boolean;
+  actionType: ActionTypeEnum;
+};
+
 export type LobbyType = {
   p1: PlayerType;
   p2: PlayerType;
   maps: MapType[];
+  order: OrderType[];
 };

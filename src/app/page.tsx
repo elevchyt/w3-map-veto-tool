@@ -4,7 +4,7 @@ import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
-import { LobbyType, MapPoolType } from "@/types/types";
+import { ActionTypeEnum, LobbyType, MapPoolType } from "@/types/types";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
@@ -81,20 +81,60 @@ export default function Home() {
     mapPool = setupMapPool(mapPool);
     if (!mapPool) return;
 
+    const gnlOrder = [
+      {
+        id: p1ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p2ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p1ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p2ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p1ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p2ID,
+        done: false,
+        actionType: ActionTypeEnum.BAN,
+      },
+      {
+        id: p1ID,
+        done: false,
+        actionType: ActionTypeEnum.PICK,
+      },
+      {
+        id: p2ID,
+        done: false,
+        actionType: ActionTypeEnum.PICK,
+      },
+    ];
+
     const newLobbyPayload: LobbyType = {
       p1: {
         id: p1ID,
         name: p1Name,
-        isBanning: false,
-        isPicking: false,
       },
       p2: {
         id: p2ID,
         name: p2Name,
-        isBanning: false,
-        isPicking: false,
       },
       maps: mapPool.maps,
+      order: gnlOrder,
     };
 
     toast
