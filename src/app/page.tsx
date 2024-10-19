@@ -15,15 +15,22 @@ import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import short from "short-uuid";
 import "./page.scss";
+import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
+import { Tooltip } from "react-tippy";
 
 export default function Home() {
   const router = useRouter();
   const [isPending, setIsPending] = useAtom(isPendingAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
+  const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
+  const [selectedMapPool, setSelectedMapPool] = useState<MapPoolType>({
+    name: "",
+    maps: [],
+  });
 
   const pickBanModes = [PickBanModeEnum.AB, PickBanModeEnum.AABB];
 
@@ -43,7 +50,7 @@ export default function Home() {
         const mapsAllTheRandoms1v1 =
           mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
 
-        const newMapPools = [
+        const presetMapPools = [
           {
             name: "W3Champions (1v1)",
             maps: maps1v1,
@@ -66,7 +73,9 @@ export default function Home() {
           },
         ];
 
-        setMapPools(newMapPools);
+        setMapPools(presetMapPools);
+        setSelectedMapPoolName(presetMapPools[0].name);
+        setSelectedMapPool(presetMapPools[0]);
       })
       .catch((err) => {
         console.error(err);
@@ -86,14 +95,15 @@ export default function Home() {
     const p1Name = formData.get("p1Name") as string;
     const p2Name = formData.get("p2Name") as string;
     const pickBanMode = formData.get("pickBanMode") as PickBanModeEnum;
-    const mapPoolName = formData.get("mapPool") as string;
-    let mapPool = mapPools.find((pool) => pool.name === mapPoolName);
-    mapPool = setupMapPool(mapPool);
-    if (!mapPool) return;
+    const finalMapPool = setupMapPool(selectedMapPool);
+    if (!finalMapPool) return;
 
-    const pickBanOrder = getPickBanModeOrder(pickBanMode, mapPool, p1ID, p2ID);
-
-    console.log(pickBanOrder);
+    const pickBanOrder = getPickBanModeOrder(
+      pickBanMode,
+      finalMapPool,
+      p1ID,
+      p2ID
+    );
 
     const newLobbyPayload: LobbyType = {
       p1: {
@@ -104,7 +114,7 @@ export default function Home() {
         id: p2ID,
         name: p2Name,
       },
-      maps: mapPool.maps,
+      maps: finalMapPool.maps,
       order: pickBanOrder,
     };
 
@@ -129,11 +139,13 @@ export default function Home() {
   // Mutate the selected map pool so that each map entry has isBannedBy & isPickedBy properties
   const setupMapPool = (mapPool: MapPoolType | undefined) => {
     if (!mapPool) return;
-    mapPool.maps = mapPool.maps.map((map) => ({
-      ...map,
-      isBannedBy: "",
-      isPickedBy: "",
-    }));
+    mapPool.maps = mapPool.maps
+      .filter((map) => !map.isExcluded)
+      .map((map) => ({
+        ...map,
+        isBannedBy: "",
+        isPickedBy: "",
+      }));
     return mapPool;
   };
 
@@ -179,13 +191,34 @@ export default function Home() {
     return pickBanOrder;
   };
 
+  const toggleMap = (mapID: number) => {
+    const newMapPool: MapPoolType = _.cloneDeep(selectedMapPool);
+    if (!newMapPool.maps || !newMapPool.maps.length) return;
+    newMapPool.maps = newMapPool.maps.map((map) => {
+      if (map.id === mapID) return { ...map, isExcluded: !map.isExcluded };
+      return map;
+    });
+    setSelectedMapPool(newMapPool);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       {/* Map Pool Selection */}
       <p>Choose a map pool:</p>
       <div className="map-pool-selection">
         {mapPools.length && !isPending ? (
-          <select required name="mapPool">
+          <select
+            required
+            name="mapPool"
+            value={selectedMapPoolName}
+            onChange={(e) => {
+              setSelectedMapPoolName(e.target.value);
+              const selectedPool = mapPools.find(
+                (pool) => pool.name === e.target.value
+              );
+              if (selectedPool) setSelectedMapPool(selectedPool);
+            }}
+          >
             {mapPools.map((map) => (
               <option key={short.generate()} value={map.name}>
                 {map.name}
@@ -195,15 +228,25 @@ export default function Home() {
         ) : null}
 
         {/* Pick/Ban Mode */}
-        <select required name="pickBanMode">
-          {pickBanModes.map((mode) => (
-            <option key={short.generate()} value={mode}>
-              {mode}
-            </option>
-          ))}
-        </select>
+        <Tooltip
+          title="Banning Order"
+          position="top"
+          trigger="mouseenter"
+          theme="light"
+        >
+          <select required name="pickBanMode">
+            {pickBanModes.map((mode) => (
+              <option key={short.generate()} value={mode}>
+                {mode}
+              </option>
+            ))}
+          </select>
+        </Tooltip>
         {isPending ? <Loading /> : null}
       </div>
+
+      {/* Map Pool Options */}
+      <MapPoolOptionsModal maps={selectedMapPool?.maps} toggleMap={toggleMap} />
 
       {/* Player Names */}
       <div className="flex-column mt-2 mb-1">

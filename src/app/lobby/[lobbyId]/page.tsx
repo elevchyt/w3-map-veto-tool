@@ -132,7 +132,7 @@ export default function Lobby() {
       <div className="copy-link-container">
         <small>{`Lobby ID: ${params.lobbyId}`}</small>
         <Tooltip
-          title="COPY"
+          title="Copy Opponent's URL"
           position="bottom"
           trigger="mouseenter"
           theme="light"
@@ -170,7 +170,6 @@ export default function Lobby() {
             name={map.name}
             isBannedBy={getPlayerFromID(map.isBannedBy, lobbyData)}
             isPickedBy={getPlayerFromID(map.isPickedBy, lobbyData)}
-            isStartingMap={false} // TODO
             enableBanAction={getCurrentPlayerAction() === ActionTypeEnum.BAN}
             enablePickAction={getCurrentPlayerAction() === ActionTypeEnum.PICK}
             handleBan={handleBan}

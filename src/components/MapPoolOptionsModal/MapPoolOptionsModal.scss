@@ -1,0 +1,71 @@
+dialog {
+  position: fixed;
+  padding: 20px;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  background-color: white;
+  user-select: none;
+  transition: all 0.25s;
+
+  h2 {
+    margin: 1rem 0;
+  }
+
+  .description {
+    width: 100%;
+  }
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.maps-list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  height: 45rem;
+  margin: 2rem 0;
+
+  .map-entry {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s;
+
+    input[type="checkbox"] {
+      margin-right: 1rem;
+      margin-top: 1rem;
+      border-radius: 0.5rem;
+      width: 2rem;
+      height: 2rem;
+      accent-color: #222222;
+      cursor: pointer;
+    }
+  }
+}
+
+.ok-button {
+  width: 100%;
+  height: 4rem;
+  font-weight: bold;
+  background: #222222;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.buttons-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}

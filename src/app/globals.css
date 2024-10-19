@@ -307,6 +307,22 @@ fieldset {
   display: flex;
 }
 
+.generic-button {
+  transition: 0.2s all;
+
+  &:disabled {
+    color: gray;
+    background-color: lightgray;
+    cursor: not-allowed;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
 .submit-button {
   transition: 0.2s all;
 
@@ -325,4 +341,17 @@ fieldset {
   &:active {
     transform: scale(0.95);
   }
+}
+
+::-webkit-scrollbar {
+  width: 1em;
+}
+ 
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
 }

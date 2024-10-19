@@ -14,7 +14,6 @@
     "lodash": "^4.17.21",
     "next": "14.2.15",
     "normalize.css": "^8.0.1",
-    "rc-tooltip": "^6.2.1",
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
