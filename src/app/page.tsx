@@ -64,7 +64,11 @@ export default function Home() {
         w3cRes.forEach((item: unknown) => {
           item.maps.forEach((map: unknown) => {
             const matchingItem = getStringBestMatch(map.name, w3infoRes, 0.7);
-            if (matchingItem) map.image = matchingItem.image;
+            if (matchingItem) {
+              map.image = matchingItem.image;
+              if (matchingItem.short)
+                map.name = `${map.name} (${matchingItem.short})`;
+            }
           });
         });
         const mapsPerGameMode = _.groupBy(w3cRes, "name");
