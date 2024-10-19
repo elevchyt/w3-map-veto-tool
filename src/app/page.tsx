@@ -1,6 +1,6 @@
 "use client";
 
-import { isPendingAtom, mapPoolsAtom } from "@/atoms/atoms";
+import { isLoadingDataAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { db } from "@/firebase/firebase";
@@ -16,7 +16,7 @@ import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
 import { useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
 import short from "short-uuid";
 import "./page.scss";
@@ -29,8 +29,8 @@ import { Tooltip } from "react-tooltip";
 
 export default function Home() {
   const router = useRouter();
-  const [isLoadingLobby, setIsLoadingLobby] = useState(false);
-  const [isPending, setIsPending] = useAtom(isPendingAtom);
+  const [isPending, startTransition] = useTransition();
+  const [isLoadingData, setIsLoadingData] = useAtom(isLoadingDataAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
   const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
   const [selectedPickBanOrder, setSelectedPickBanOrder] = useState("");
@@ -42,7 +42,7 @@ export default function Home() {
   const pickBanModes = [PickBanModeEnum.AB, PickBanModeEnum.AABB];
 
   useEffect(() => {
-    setIsPending(true);
+    setIsLoadingData(true);
     const w3ChampionsDataRequest = fetch(w3championsLadderMapsDataURL)
       .then((res) => res.json())
       .then((data) => {
@@ -136,9 +136,9 @@ export default function Home() {
         console.error(err);
       })
       .finally(() => {
-        setIsPending(false);
+        setIsLoadingData(false);
       });
-  }, [setIsPending, setMapPools]);
+  }, [setIsLoadingData, setMapPools]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -173,7 +173,6 @@ export default function Home() {
       order: pickBanOrder,
     };
 
-    setIsLoadingLobby(true);
     toast
       .promise(createLobby(newLobbyID, newLobbyPayload), {
         loading: "Creating your lobby...",
@@ -181,13 +180,12 @@ export default function Home() {
         error: <b>Error creating lobby 😥</b>,
       })
       .then(() => {
-        router.push(`/lobby/${newLobbyID}?setP1=${p1ID}&p2ID=${p2ID}`);
+        startTransition(() => {
+          router.push(`/lobby/${newLobbyID}?setP1=${p1ID}&p2ID=${p2ID}`);
+        });
       })
       .catch((err) => {
         console.error(err);
-      })
-      .finally(() => {
-        setIsLoadingLobby(false);
       });
   };
 
@@ -270,7 +268,7 @@ export default function Home() {
         {/* Map Pool Selection */}
         <p>Choose a map pool:</p>
         <div className="map-pool-selection">
-          {mapPools.length && !isPending ? (
+          {mapPools.length && !isLoadingData ? (
             <select
               required
               name="mapPool"
@@ -290,7 +288,7 @@ export default function Home() {
               ))}
             </select>
           ) : null}
-          {isPending ? <Loading /> : null}
+          {isLoadingData ? <Loading /> : null}
           {/* Pick/Ban Mode */}
           <Tooltip
             id="pick-ban-tooltip"
@@ -342,12 +340,12 @@ export default function Home() {
         <button
           className="generic-button"
           type="submit"
-          disabled={isPending || isLoadingLobby || !mapPools.length}
+          disabled={isPending || isLoadingData || !mapPools.length}
         >
           Launch Lobby
         </button>
         {/* Feedback */}
-        {!mapPools.length && !isPending ? <ErrorHint /> : null}
+        {!mapPools.length && !isLoadingData ? <ErrorHint /> : null}
       </form>
     </>
   );

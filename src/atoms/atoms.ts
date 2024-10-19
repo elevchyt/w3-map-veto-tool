@@ -1,7 +1,7 @@
 import { MapPoolType } from "@/types/types";
 import { atom } from "jotai";
 
-export const isPendingAtom = atom(true);
+export const isLoadingDataAtom = atom(true);
 export const maps1v1Atom = atom<unknown[]>([]);
 export const maps2v2Atom = atom<unknown[]>([]);
 export const maps3v3Atom = atom<unknown[]>([]);

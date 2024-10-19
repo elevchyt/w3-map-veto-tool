@@ -7,8 +7,6 @@ import { useParams, useSearchParams } from "next/navigation";
 import { ActionTypeEnum, LobbyType } from "@/types/types";
 import "./page.scss";
 import Card from "@/components/Card/Card";
-import { isPendingAtom } from "@/atoms/atoms";
-import { useAtom } from "jotai";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { MdContentCopy } from "react-icons/md";
@@ -21,7 +19,7 @@ export default function Lobby() {
   const params = useParams();
   const searchParams = useSearchParams();
   const [lobbyData, setLobbyData] = useState<LobbyType>();
-  const [isPending, setIsPending] = useAtom(isPendingAtom);
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [playerID, setPlayerID] = useState<string>("");
   const [p2URL, setP2URL] = useState<string>("");
 
@@ -42,6 +40,7 @@ export default function Lobby() {
     if (setP2) setPlayerID(setP2);
 
     // Load lobby data
+    setIsPending(true);
     const lobbiesRef = ref(db, `/lobbies/${params.lobbyId}`);
     get(lobbiesRef)
       .then((snapshot) => {
