@@ -21,11 +21,11 @@ import toast from "react-hot-toast";
 import short from "short-uuid";
 import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
-import { Tooltip } from "react-tippy";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
 import { getMapBestMatchByName } from "@/utils/utils";
 import { GNLS15MapNames } from "@/utils/customMapPools";
 import stringSimilarity from "string-similarity";
+import { Tooltip } from "react-tooltip";
 
 export default function Home() {
   const router = useRouter();
@@ -286,29 +286,28 @@ export default function Home() {
             </select>
           ) : null}
           {isPending ? <Loading /> : null}
-
           {/* Pick/Ban Mode */}
           <Tooltip
-            title="Banning Order"
-            position="top"
-            trigger="mouseenter"
-            theme="light"
+            id="pick-ban-tooltip"
+            style={{ backgroundColor: "rgb(255, 255, 255)", color: "#222" }}
+          />
+          <select
+            required
+            name="pickBanMode"
+            value={selectedPickBanOrder}
+            onChange={(e) => {
+              setSelectedPickBanOrder(e.target.value);
+            }}
+            data-tooltip-id="pick-ban-tooltip"
+            data-tooltip-content="Banning order"
+            data-tooltip-place="top"
           >
-            <select
-              required
-              name="pickBanMode"
-              value={selectedPickBanOrder}
-              onChange={(e) => {
-                setSelectedPickBanOrder(e.target.value);
-              }}
-            >
-              {pickBanModes.map((mode) => (
-                <option key={short.generate()} value={mode}>
-                  {mode}
-                </option>
-              ))}
-            </select>
-          </Tooltip>
+            {pickBanModes.map((mode) => (
+              <option key={short.generate()} value={mode}>
+                {mode}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Map Pool Options */}

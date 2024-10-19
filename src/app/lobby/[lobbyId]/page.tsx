@@ -12,10 +12,10 @@ import { useAtom } from "jotai";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
 import { MdContentCopy } from "react-icons/md";
-import { Tooltip } from "react-tippy";
 import toast from "react-hot-toast";
 import { getPlayerFromID } from "@/utils/utils";
 import _ from "lodash";
+import { Tooltip } from "react-tooltip";
 
 export default function Lobby() {
   const params = useParams();
@@ -130,20 +130,21 @@ export default function Lobby() {
       <div className="copy-link-container">
         <small>{`Lobby ID: ${params.lobbyId}`}</small>
         <Tooltip
-          title="Copy Opponent's URL"
-          position="bottom"
-          trigger="mouseenter"
-          theme="light"
-        >
-          {p2URL ? (
-            <MdContentCopy
-              cursor="pointer"
-              onClick={() => {
-                copyP2URL();
-              }}
-            />
-          ) : null}
-        </Tooltip>
+          id="copy-url-tooltip"
+          style={{ backgroundColor: "rgb(255, 255, 255)", color: "#222" }}
+        />
+
+        {p2URL ? (
+          <MdContentCopy
+            cursor="pointer"
+            onClick={() => {
+              copyP2URL();
+            }}
+            data-tooltip-id="copy-url-tooltip"
+            data-tooltip-content="Copy opponent's URL"
+            data-tooltip-place="top"
+          />
+        ) : null}
       </div>
 
       {/* Lobby State */}
