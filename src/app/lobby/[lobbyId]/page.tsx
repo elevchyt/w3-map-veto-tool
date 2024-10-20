@@ -17,7 +17,7 @@ export default function Lobby() {
   const params = useParams();
   const searchParams = useSearchParams();
   const [lobbyData, setLobbyData] = useState<LobbyType>();
-  const [isPending, setIsPending] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(true);
   const [playerID, setPlayerID] = useState<string>("");
   const [p2URL, setP2URL] = useState<string>("");
 
