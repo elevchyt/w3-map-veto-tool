@@ -9,5 +9,5 @@ export const GNLS15MapNames = [
   "Northern Isles",
   "Shallow Grave",
   "Tidehunters",
-  "Echo Isle 2.0",
+  "Echo Isles v2",
 ];

@@ -30,8 +30,6 @@ export default function Card(props: PropsType) {
         <Image
           className="map-image"
           src={`${w3infoMapImagesURL}/${props.image?.file_name}`}
-          // width={props.image?.width}
-          // height={props.image?.height}
           width={128}
           height={128}
           alt={props.name}

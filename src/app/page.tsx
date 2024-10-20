@@ -90,16 +90,7 @@ export default function Home() {
         const maps4v4w3c = mapsPerGameMode["4 vs 4"][0]["maps"];
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
-        const mapsGNLS15 = mapsPerGameMode["1 vs 1"][0]["maps"].filter(
-          (map: MapType) => {
-            const threshold = 0.7;
-            const bestMatch = stringSimilarity.findBestMatch(
-              map.name,
-              GNLS15MapNames
-            );
-            return bestMatch.bestMatch.rating >= threshold;
-          }
-        );
+        const mapsGNLS15 = getMapsByMapPool(maps1v1w3c, GNLS15MapNames);
 
         const presetMapPools = [
           {
@@ -139,6 +130,23 @@ export default function Home() {
         setIsLoadingData(false);
       });
   }, [setIsLoadingData, setMapPools]);
+
+  const getMapsByMapPool = (
+    mapsPerGameMode: MapType[],
+    mapNamesPool: string[]
+  ) => {
+    const maps = mapsPerGameMode.filter((map: MapType) => {
+      const threshold = 0.7;
+      const bestMatch = stringSimilarity.findBestMatch(
+        map.name,
+        GNLS15MapNames
+      );
+      return bestMatch.bestMatch.rating >= threshold;
+    });
+    if (maps.length !== mapNamesPool.length)
+      console.error("Could not find one or more maps!");
+    else return maps;
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
