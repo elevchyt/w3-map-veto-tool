@@ -6,7 +6,8 @@ import NavLinks from "@/components/NavLinks";
 
 export const metadata: Metadata = {
   title: "W3 Map Veto Tool",
-  description: "Streamlined ban/pick map process for Warcraft 3 leagues and tournaments.",
+  description:
+    "Streamlined ban/pick map process for Warcraft 3 leagues and tournaments.",
 };
 
 export default function RootLayout({
