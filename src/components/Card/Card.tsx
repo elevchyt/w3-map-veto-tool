@@ -48,7 +48,7 @@ export default function Card(props: PropsType) {
                 props.handleBan(props.id);
               }}
             >
-              Ban
+              BAN
             </button>
           ) : null}
           {props.enablePickAction ? (
@@ -58,7 +58,7 @@ export default function Card(props: PropsType) {
                 props.handlePick(props.id);
               }}
             >
-              Pick
+              PICK
             </button>
           ) : null}
         </>
