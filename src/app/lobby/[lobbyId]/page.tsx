@@ -30,7 +30,7 @@ export default function Lobby() {
     const p2ID = searchParams.get("p2ID");
     if (p2ID)
       setP2URL(
-        `${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`
+        `https://${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`
       );
 
     // If P2 ID exists in search params with the key "setP2", set current player's sessions as P2
