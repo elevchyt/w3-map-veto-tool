@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars -- we need this */
 "use client";
 
 import { isLoadingDataAtom, mapPoolsAtom } from "@/atoms/atoms";
@@ -90,13 +91,8 @@ export default function Home() {
         const maps4v4w3c = mapsPerGameMode["4 vs 4"][0]["maps"];
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
-        const mapsGNLS15 = getMapsByMapPool(maps1v1w3c, GNLS15MapNames);
 
         const presetMapPools = [
-          {
-            name: "GNL Season 15",
-            maps: mapsGNLS15,
-          },
           {
             name: "W3Champions (1v1)",
             maps: maps1v1w3c,
