@@ -4,6 +4,8 @@ export enum ActionTypeEnum {
 }
 
 export enum PickBanModeEnum {
+  Bo3 = "Bo3 (9 maps)",
+  Bo5 = "Bo5 (9 maps)",
   AB = "A-B",
   AABB = "A-A-B-B",
 }
