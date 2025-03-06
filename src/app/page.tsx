@@ -104,7 +104,7 @@ export default function Home() {
         console.log(mapsDACHInferno);
         const presetMapPools: MapPoolType[] = [
           {
-            name: "D-A-CH Inferno",
+            name: "DACH Inferno",
             maps: mapsDACHInferno,
           },
           {
