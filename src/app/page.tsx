@@ -15,7 +15,7 @@ import {
 } from "@/types/types";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
-import _ from "lodash";
+import _, { Dictionary } from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -24,7 +24,7 @@ import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
 import { getMapBestMatchByName } from "@/utils/utils";
-import { GNLS15MapNames } from "@/utils/customMapPools";
+import { DACHInfernoMapNames, GNLS15MapNames } from "@/utils/customMapPools";
 import stringSimilarity from "string-similarity";
 import { Tooltip } from "react-tooltip";
 
@@ -84,15 +84,24 @@ export default function Home() {
             }
           });
         });
-        const mapsPerGameMode = _.groupBy(w3cRes, "name"); // Maps per game mode with all the data we need :)
-        const maps1v1w3c = mapsPerGameMode["1 vs 1"][0]["maps"];
-        const maps2v2w3c = mapsPerGameMode["2 vs 2"][0]["maps"];
-        const maps3v3w3c = mapsPerGameMode["3 vs 3"][0]["maps"];
-        const maps4v4w3c = mapsPerGameMode["4 vs 4"][0]["maps"];
+        const groupedMaps = _.groupBy(w3cRes, "name"); // Group maps by name
+        const mapsPerGameMode = new Map<string, MapPoolType[]>(
+          Object.entries(groupedMaps)
+        );
+        const maps1v1w3c = mapsPerGameMode.get("1 vs 1")?.[0]["maps"] ?? [];
+        const maps2v2w3c = mapsPerGameMode.get("2 vs 2")?.[0]["maps"] ?? [];
+        const maps3v3w3c = mapsPerGameMode.get("3 vs 3")?.[0]["maps"] ?? [];
+        const maps4v4w3c = mapsPerGameMode.get("4 vs 4")?.[0]["maps"] ?? [];
         const mapsAllTheRandoms1v1w3c =
-          mapsPerGameMode["All The Randoms 1vs1"][0]["maps"];
-
-        const presetMapPools = [
+          mapsPerGameMode.get("All The Randoms 1vs1")?.[0]["maps"] ?? [];
+        const mapsDACHInferno =
+          createMapPoolByMapNames(mapsPerGameMode, DACHInfernoMapNames) ?? [];
+        console.log(mapsDACHInferno);
+        const presetMapPools: MapPoolType[] = [
+          {
+            name: "D-A-CH Inferno",
+            maps: mapsDACHInferno,
+          },
           {
             name: "W3Champions (1v1)",
             maps: maps1v1w3c,
@@ -114,7 +123,6 @@ export default function Home() {
             maps: mapsAllTheRandoms1v1w3c,
           },
         ];
-
         setMapPools(presetMapPools);
         setSelectedMapPoolName(presetMapPools[0].name);
         setSelectedMapPool(presetMapPools[0]);
@@ -127,21 +135,35 @@ export default function Home() {
       });
   }, [setIsLoadingData, setMapPools]);
 
-  const getMapsByMapPool = (
-    mapsPerGameMode: MapType[],
+  const createMapPoolByMapNames = (
+    mapsPerGameMode: Map<string, MapPoolType[]>,
     mapNamesPool: string[]
-  ) => {
-    const maps = mapsPerGameMode.filter((map: MapType) => {
-      const threshold = 0.7;
-      const bestMatch = stringSimilarity.findBestMatch(
-        map.name,
-        GNLS15MapNames
-      );
-      return bestMatch.bestMatch.rating >= threshold;
-    });
+  ): MapType[] => {
+    const mapsFoundData = new Map<string, boolean>(
+      mapNamesPool.map((mapName) => [mapName, false])
+    ); // ensures no duplicate maps are inserted
+    const maps: MapType[] = [];
+    for (const [_key, pool] of Array.from(mapsPerGameMode.entries())) {
+      const mapPool = pool[0].maps;
+      for (const map of mapPool) {
+        for (const mapName of mapNamesPool) {
+          const nameSimilarityThreshold = 0.7;
+          const bestMatch = stringSimilarity.findBestMatch(
+            map.name,
+            mapNamesPool
+          );
+          const isFound = bestMatch.bestMatch.rating >= nameSimilarityThreshold;
+          if (isFound && !mapsFoundData.get(mapName)) {
+            mapsFoundData.set(mapName, true);
+            maps.push(map);
+            break;
+          }
+        }
+      }
+    }
     if (maps.length !== mapNamesPool.length)
-      console.error("Could not find one or more maps!");
-    else return maps;
+      console.error("[ERROR] Map pool has mistakes! 😥");
+    return _.sortBy(maps, "name");
   };
 
   const handleSubmit = (e: FormEvent) => {

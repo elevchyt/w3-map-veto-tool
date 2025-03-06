@@ -1,4 +1,4 @@
-// Add the map names here, there is not need to be very specific with their names
+// Add the map names here, there is no need to be very specific with their names
 // e.g. "Autumn Leaves 2.0" is going to be found if we insert just "autumn leaves"
 export const GNLS15MapNames = [
   "Autumn Leaves",
@@ -10,4 +10,16 @@ export const GNLS15MapNames = [
   "Shallow Grave",
   "Tidehunters",
   "Echo Isles v2",
+];
+
+export const DACHInfernoMapNames = [
+  "Autumn Leaves",
+  "Boulder Vale",
+  "Hammerfall",
+  "Northern Isles",
+  "Shallow Grave",
+  "Springtime",
+  "Secret Valley",
+  "Tidehunters",
+  "Twisted Meadows",
 ];
