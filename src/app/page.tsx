@@ -15,7 +15,7 @@ import {
 } from "@/types/types";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
-import _, { Dictionary } from "lodash";
+import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -250,88 +250,88 @@ export default function Home() {
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
-        ]
+        ];
         break;
       case PickBanModeEnum.Bo5:
         pickBanOrder = [
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.BAN
+            actionType: ActionTypeEnum.BAN,
           },
           {
             id: p2ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
           {
             id: p1ID,
             done: false,
-            actionType: ActionTypeEnum.PICK
+            actionType: ActionTypeEnum.PICK,
           },
-        ]
+        ];
         break;
       case PickBanModeEnum.AB:
         pickBanOrder = mapPool.maps.map((map, index) => {
