@@ -36,6 +36,8 @@ export default function Card(props: PropsType) {
         />
       </div>
 
+      {props.isPickedBy ? <b>Map {props.pickNumber}</b> : null}
+      
       {/* Actions */}
       {!props.isBannedBy && !props.isPickedBy ? (
         <>

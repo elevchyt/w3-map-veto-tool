@@ -23,6 +23,7 @@ export type MapType = {
   isBannedBy?: string;
   isPickedBy?: string;
   isExcluded?: boolean;
+  pickNumber?: number;  // determines the order that the maps will be played
 };
 
 export type MapPoolType = {

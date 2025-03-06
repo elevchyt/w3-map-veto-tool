@@ -109,12 +109,18 @@ export default function Lobby() {
       if (index === currentOrderDataIndex) return { ...order, done: true };
       return order;
     });
+    // Find the highest pickNumber value among the maps and assign that
+    const highestPickNumber = Math.max(
+      0,
+      ...lobbyData.maps.map((map) => map.pickNumber || 0)
+    );
+    const pickNumber = highestPickNumber + 1;
     const payload = {
       ...lobbyData,
       order: updatedOrderData,
       maps: lobbyData?.maps.map((map) => {
         if (map.id === mapID) {
-          return { ...map, isPickedBy: playerID };
+          return { ...map, pickNumber, isPickedBy: playerID };
         }
         return map;
       }),
@@ -159,6 +165,7 @@ export default function Lobby() {
             id={map.id}
             name={map.name}
             image={map.image}
+            pickNumber={map.pickNumber}
             isBannedBy={getPlayerFromID(map.isBannedBy, lobbyData)}
             isPickedBy={getPlayerFromID(map.isPickedBy, lobbyData)}
             enableBanAction={getCurrentPlayerAction() === ActionTypeEnum.BAN}
