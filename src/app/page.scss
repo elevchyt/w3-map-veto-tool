@@ -1,3 +1,13 @@
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+
+  img {
+    margin-top: 1.8em;
+  }
+}
+
 .map-pool-selection {
   display: flex;
   align-items: center;
