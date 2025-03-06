@@ -52,6 +52,15 @@
   bottom: 1rem;
   width: 10rem;
   transition: 0.2s all;
+  border-radius: 5px;
+
+  &.ban {
+    box-shadow: 0 0 10px 2px rgba(255, 0, 0, 1);
+  }
+
+  &.pick {
+    box-shadow: 0 0 5px 3px rgba(0, 255, 0, 0.75);
+  }
 
   &:disabled {
     color: gray;

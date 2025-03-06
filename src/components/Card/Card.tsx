@@ -41,7 +41,7 @@ export default function Card(props: PropsType) {
         <>
           {props.enableBanAction ? (
             <button
-              className="action-button"
+              className="action-button ban"
               onClick={() => {
                 props.handleBan(props.id);
               }}
@@ -51,7 +51,7 @@ export default function Card(props: PropsType) {
           ) : null}
           {props.enablePickAction ? (
             <button
-              className="action-button"
+              className="action-button pick"
               onClick={() => {
                 props.handlePick(props.id);
               }}
