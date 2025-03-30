@@ -23,3 +23,15 @@ export const DACHInfernoMapNames = [
   "Tidehunters",
   "Twisted Meadows",
 ];
+
+export const GNLSeason15MapNames = [
+  "Autumn Leaves",
+  "Concealed Hill",
+  "Secret Valley v2",
+  "Hammerfall",
+  "Last Refuge",
+  "Northern Isles",
+  "Shallow Grave",
+  "Tidehunters",
+  "Boulder Vale",
+];

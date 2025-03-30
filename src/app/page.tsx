@@ -24,7 +24,11 @@ import "./page.scss";
 import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
 import { getMapBestMatchByName } from "@/utils/utils";
-import { DACHInfernoMapNames, GNLS15MapNames } from "@/utils/customMapPools";
+import {
+  DACHInfernoMapNames,
+  GNLS15MapNames,
+  GNLSeason15MapNames,
+} from "@/utils/customMapPools";
 import stringSimilarity from "string-similarity";
 import { Tooltip } from "react-tooltip";
 
@@ -41,6 +45,7 @@ export default function Home() {
   });
 
   const pickBanModes = [
+    PickBanModeEnum.ABBAAB,
     PickBanModeEnum.Bo3,
     PickBanModeEnum.Bo5,
     PickBanModeEnum.AB,
@@ -101,8 +106,13 @@ export default function Home() {
           mapsPerGameMode.get("All The Randoms 1vs1")?.[0]["maps"] ?? [];
         const mapsDACHInferno =
           createMapPoolByMapNames(mapsPerGameMode, DACHInfernoMapNames) ?? [];
-        console.log(mapsDACHInferno);
+        const mapsGNLSeason15Inferno =
+          createMapPoolByMapNames(mapsPerGameMode, GNLSeason15MapNames) ?? [];
         const presetMapPools: MapPoolType[] = [
+          {
+            name: "GNL Season 15",
+            maps: mapsGNLSeason15Inferno,
+          },
           {
             name: "DACH Inferno",
             maps: mapsDACHInferno,
@@ -245,6 +255,50 @@ export default function Home() {
   ): OrderType[] => {
     let pickBanOrder: OrderType[] = [];
     switch (pickBanMode) {
+      case PickBanModeEnum.ABBAAB:
+        pickBanOrder = [
+          {
+            id: p1ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p2ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p2ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p1ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p1ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p2ID,
+            done: false,
+            actionType: ActionTypeEnum.BAN,
+          },
+          {
+            id: p1ID,
+            done: false,
+            actionType: ActionTypeEnum.PICK,
+          },
+          {
+            id: p2ID,
+            done: false,
+            actionType: ActionTypeEnum.PICK,
+          },
+        ];
+        break;
       case PickBanModeEnum.Bo3:
         pickBanOrder = [
           {
@@ -332,21 +386,6 @@ export default function Home() {
             actionType: ActionTypeEnum.PICK,
           },
         ];
-        break;
-      case PickBanModeEnum.AB:
-        pickBanOrder = mapPool.maps.map((map, index) => {
-          let playerID = index % 2 === 0 ? p1ID : p2ID;
-          if (index === mapPool.maps.length - 1) playerID = p2ID;
-          else if (index === mapPool.maps.length - 2) playerID = p1ID;
-          return {
-            id: playerID,
-            done: false,
-            actionType:
-              index < mapPool.maps.length - 2
-                ? ActionTypeEnum.BAN
-                : ActionTypeEnum.PICK,
-          };
-        });
         break;
       case PickBanModeEnum.AABB:
         pickBanOrder = mapPool.maps.map((map, index) => {
