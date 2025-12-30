@@ -1,24 +1,39 @@
 dialog {
   position: fixed;
   padding: 20px;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  background-color: white;
+
+  /* WC3 Dialog Style */
+  background-color: #000;
+  background-image: linear-gradient(to bottom, #1a1a1a, #000);
+  border: 3px solid #555;
+  border-top-color: #888;
+  border-left-color: #888;
+  border-right-color: #333;
+  border-bottom-color: #333;
+  box-shadow: 0 0 20px #000;
+  color: #dedce5;
+
+  border-radius: 2px;
   user-select: none;
   transition: all 0.25s;
 
   h2 {
     margin: 1rem 0;
+    color: #ffcc00;
+    text-shadow: 2px 2px 0 #000;
+    font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+      serif;
+    text-transform: uppercase;
   }
 
   .description {
     width: 100%;
+    color: #ccc;
   }
 }
 
 dialog::backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 .maps-list {
@@ -28,21 +43,33 @@ dialog::backdrop {
   overflow-y: auto;
   height: 45rem;
   margin: 2rem 0;
+  border: 2px solid #333;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
 
   .map-entry {
     display: flex;
     align-items: center;
     cursor: pointer;
     transition: all 0.25s;
+    padding: 0.5rem;
+
+    &:hover {
+      label {
+        text-decoration: underline;
+        color: #ffcc00;
+      }
+    }
 
     input[type="checkbox"] {
       margin-right: 1rem;
-      margin-top: 1rem;
-      border-radius: 0.5rem;
+      margin-top: 8px;
+      border-radius: 0;
       width: 2rem;
       height: 2rem;
-      accent-color: #222222;
+      accent-color: #ffcc00;
       cursor: pointer;
+      border: 1px solid #555;
     }
   }
 }
@@ -50,16 +77,36 @@ dialog::backdrop {
 .ok-button {
   width: 100%;
   height: 4rem;
-  font-weight: bold;
-  background: #222222;
-  border: none;
-  color: white;
+
+  /* WC3 Button Style */
+  background: linear-gradient(180deg, #002a66 0%, #001133 100%);
+  color: #ffcc00;
+  font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+    serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000;
+  border: 2px solid #555;
+  border-top-color: #888;
+  border-left-color: #888;
+  border-right-color: #333;
+  border-bottom-color: #333;
+
   font-size: 1.5rem;
   cursor: pointer;
-  transition: all 0.25s;
+  transition: filter 0.1s;
+
+  &:hover {
+    filter: brightness(1.25);
+  }
 
   &:active {
-    transform: scale(0.95);
+    filter: brightness(0.8);
+    border-top-color: #333;
+    border-left-color: #333;
+    border-right-color: #888;
+    border-bottom-color: #888;
+    transform: translateY(1px);
   }
 }
 

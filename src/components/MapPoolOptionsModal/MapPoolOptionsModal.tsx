@@ -32,7 +32,7 @@ export default function MapPoolOptionsModal(props: PropsType) {
             style={{ fontSize: "0.8em", marginLeft: "10px" }}
             className="animation-pulse"
           >
-            ← Make sure to remove the starting map before creating the lobby!
+            ← Make sure to remove the starting map before launching the lobby!
           </span>
         ) : null}
       </div>

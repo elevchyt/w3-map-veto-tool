@@ -8,27 +8,32 @@ footer {
   bottom: 0;
   width: 100%;
   margin-top: 4rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.192);
-  color: white;
+
+  /* WC3 Footer Style */
+  border-top: 2px solid #555;
+  color: #888;
   text-align: center;
   padding: 1rem 0;
-  background: #222222;
 
   p {
-    opacity: 0.25;
+    opacity: 0.5;
     margin: 1rem 0;
     font-size: 1.4rem;
+    font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+      serif;
   }
 
   img {
     margin: 0;
     transition: all 0.25s;
+    border: none; /* Remove global border for icons if any */
 
     &:hover {
       transform: rotate(3deg);
+      filter: brightness(1.2);
     }
     &:active {
-      opacity: 0.25;
+      opacity: 0.5;
     }
   }
 
@@ -38,10 +43,11 @@ footer {
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      opacity: 0.5;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 5px #ffcc00);
     }
     &:active {
-      transform: scale(0.5);
+      transform: scale(0.9);
     }
   }
 }

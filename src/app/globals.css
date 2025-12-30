@@ -7,17 +7,19 @@
 /* Body */
 html {
   font-size: 62.5%;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 body {
+  font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+    serif;
   font-size: 1.8rem;
   line-height: 1.618;
   max-width: 42em;
   margin: auto;
-  color: #c9c9c9;
-  background-color: #222222;
+  color: #dedce5;
+  background-color: #000000;
+  background-size: cover;
+  background-attachment: fixed;
   padding: 13px;
   user-select: none;
 }
@@ -39,15 +41,18 @@ h4,
 h5,
 h6 {
   line-height: 1.1;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+    serif;
   font-weight: 700;
+  color: #ffcc00;
+  text-shadow: 2px 2px 0 #000;
   margin-top: 3rem;
   margin-bottom: 1.5rem;
   overflow-wrap: break-word;
   word-wrap: break-word;
   -ms-word-break: break-all;
   word-break: break-word;
+  text-transform: uppercase;
 }
 
 h1 {
@@ -117,9 +122,14 @@ blockquote {
   padding-top: 0.8em;
   padding-bottom: 0.8em;
   padding-right: 0.8em;
-  border-left: 5px solid #ffffff;
+  border: 2px solid #555;
+  border-top-color: #888;
+  border-left-color: #888;
+  border-right-color: #333;
+  border-bottom-color: #333;
   margin-bottom: 2.5rem;
-  background-color: #4a4a4a;
+  background-color: #111;
+  box-shadow: inset 0 0 10px #000;
 }
 
 blockquote p {
@@ -132,17 +142,23 @@ video {
   max-width: 100%;
   margin-top: 0px;
   margin-bottom: 2.5rem;
+  border: 2px solid #555;
 }
 
 /* Pre and Code */
 pre {
-  background-color: #4a4a4a;
+  background-color: #111;
   display: block;
   padding: 1em;
   overflow-x: auto;
   margin-top: 0px;
   margin-bottom: 2.5rem;
   font-size: 0.9em;
+  border: 2px solid #555;
+  border-top-color: #333;
+  border-left-color: #333;
+  border-right-color: #888;
+  border-bottom-color: #888;
 }
 
 code,
@@ -150,8 +166,9 @@ kbd,
 samp {
   font-size: 0.9em;
   padding: 0 0.5em;
-  background-color: #4a4a4a;
+  background-color: #222;
   white-space: pre-wrap;
+  color: #ffcc00;
 }
 
 pre > code {
@@ -167,22 +184,37 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 2rem;
+  border: 2px solid #555;
 }
 
 td,
 th {
   padding: 0.5em;
-  border-bottom: 1px solid #4a4a4a;
+  border-bottom: 1px solid #333;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+th {
+  color: #ffcc00;
+  text-transform: uppercase;
+  border-bottom: 2px solid #555;
 }
 
 /* Buttons, forms and input */
 input,
 textarea {
-  border: 1px solid #c9c9c9;
+  border: 2px solid #555;
+  border-top-color: #333;
+  border-left-color: #333;
+  border-right-color: #888;
+  border-bottom-color: #888;
+  background-color: #000;
+  color: #fff;
 }
 input:focus,
 textarea:focus {
-  border: 1px solid #ffffff;
+  border-color: #ffcc00;
+  outline: 0;
 }
 
 textarea {
@@ -200,12 +232,27 @@ input[type="file"]::file-selector-button {
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
-  background-color: #ffffff;
-  color: #222222;
-  border-radius: 1px;
-  border: 1px solid #ffffff;
+
+  /* WC3 Button Style */
+  background: linear-gradient(180deg, #002a66 0%, #001133 100%);
+  color: #ffcc00;
+  font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+    serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000;
+
+  border: 2px solid #555;
+  border-top-color: #888;
+  border-left-color: #888;
+  border-right-color: #333;
+  border-bottom-color: #333;
+  border-radius: 2px;
+
   cursor: pointer;
   box-sizing: border-box;
+  box-shadow: inset 0 0 5px #000, 0 0 0 1px #000;
+  transition: filter 0.1s;
 }
 .button[disabled],
 button[disabled],
@@ -214,7 +261,8 @@ input[type="reset"][disabled],
 input[type="button"][disabled],
 input[type="file"]:disabled::file-selector-button {
   cursor: default;
-  opacity: 0.5;
+  filter: grayscale(100%) brightness(0.5);
+  opacity: 0.8;
 }
 .button:hover,
 button:hover,
@@ -222,9 +270,10 @@ input[type="submit"]:hover,
 input[type="reset"]:hover,
 input[type="button"]:hover,
 input[type="file"]::file-selector-button:hover {
-  background-color: #c9c9c9;
-  color: #222222;
+  filter: brightness(1.25);
+  color: #ffcc00;
   outline: 0;
+  background-color: transparent;
 }
 .button:focus-visible,
 button:focus-visible,
@@ -232,26 +281,30 @@ input[type="submit"]:focus-visible,
 input[type="reset"]:focus-visible,
 input[type="button"]:focus-visible,
 input[type="file"]::file-selector-button:focus-visible {
-  outline-style: solid;
-  outline-width: 2px;
+  outline: 2px solid #ffcc00;
+  outline-offset: 2px;
 }
 
 textarea,
 select,
 input {
-  color: #c9c9c9;
-  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  color: #dedce5;
+  padding: 6px 10px;
   margin-bottom: 10px;
-  background-color: #4a4a4a;
-  border: 1px solid #4a4a4a;
-  border-radius: 4px;
-  box-shadow: none;
+  background-color: #111;
+  border: 2px solid #555;
+  border-top-color: #333;
+  border-left-color: #333;
+  border-right-color: #888;
+  border-bottom-color: #888;
+  border-radius: 0;
+  box-shadow: inset 0 0 5px #000;
   box-sizing: border-box;
 }
 textarea:focus,
 select:focus,
 input:focus {
-  border: 1px solid #ffffff;
+  border-color: #ffcc00;
   outline: 0;
 }
 
@@ -334,50 +387,71 @@ fieldset {
 }
 
 .generic-button {
-  transition: all 0.2s ease;
-  background-color: #ffffff;
-  color: #222222;
-  border: 1px solid #ffffff;
-  border-radius: 4px;
-  font-weight: 500;
+  transition: filter 0.1s ease;
+  background: linear-gradient(180deg, #002a66 0%, #001133 100%);
+  color: #ffcc00;
+  font-family: var(--font-friz-quadrata), "Friz Quadrata TT", "Friz Quadrata",
+    serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 #000;
+  padding: 8px 20px;
+
+  /* Metallic Bevel Border */
+  border: 3px solid #555;
+  border-top-color: #888;
+  border-left-color: #888;
+  border-right-color: #333;
+  border-bottom-color: #333;
+  border-radius: 2px;
+
+  box-shadow: inset 0 0 10px #000, /* Inner depth */ 0 0 0 1px #000; /* Outer black outline */
 
   &:hover:not(:disabled) {
-    background-color: #e6e6e6;
-    border-color: #e6e6e6;
+    filter: brightness(1.25);
+    cursor: pointer;
   }
 
   &:active:not(:disabled) {
-    transform: scale(0.95);
-    background-color: #c9c9c9;
-    border-color: #c9c9c9;
+    filter: brightness(0.8);
+    border-top-color: #333;
+    border-left-color: #333;
+    border-right-color: #888;
+    border-bottom-color: #888;
+    transform: translateY(1px);
   }
 
   &:focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
+    outline: 2px solid #ffcc00;
+    outline-offset: 4px;
   }
 
   &:disabled {
-    color: #666666;
-    background-color: #4a4a4a;
-    border-color: #4a4a4a;
+    filter: grayscale(100%) brightness(0.5);
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: 0.8;
     pointer-events: none;
   }
 }
 
 ::-webkit-scrollbar {
   width: 1em;
+  background-color: #111;
 }
 
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #222;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: darkgrey;
-  outline: 1px solid slategrey;
+  background-color: #555;
+  border: 1px solid #333;
+  outline: 1px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #777;
 }
 
 @keyframes animation-pulse {
