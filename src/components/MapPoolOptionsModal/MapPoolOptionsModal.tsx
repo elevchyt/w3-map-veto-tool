@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import "./MapPoolOptionsModal.scss";
 import { MapPoolType, MapType } from "@/types/types";
 import shortUUID from "short-uuid";
+import Loading from "../Loading";
 
 type PropsType = {
   selectedMapPool: MapPoolType;

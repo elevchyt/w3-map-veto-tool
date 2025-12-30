@@ -424,6 +424,21 @@ export default function Home() {
     setSelectedMapPool(newMapPool);
   };
 
+  if (isLoadingData)
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loading />
+      </div>
+    );
+
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -456,7 +471,6 @@ export default function Home() {
               ))}
             </select>
           ) : null}
-          {isLoadingData ? <Loading /> : null}
           {/* Pick/Ban Mode */}
           <Tooltip
             id="pick-ban-tooltip"
@@ -509,13 +523,22 @@ export default function Home() {
         </div>
 
         {/* Action Buttons */}
-        <button
-          className="generic-button"
-          type="submit"
-          disabled={isPending || isLoadingData || !mapPools.length}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+          }}
         >
-          Launch Lobby
-        </button>
+          <button
+            className="generic-button"
+            type="submit"
+            disabled={isPending || isLoadingData || !mapPools.length}
+          >
+            Launch Lobby
+          </button>
+          {isPending ? <Loading /> : null}
+        </div>
         {/* Feedback */}
         {!mapPools.length && !isLoadingData ? <ErrorHint /> : null}
       </form>
