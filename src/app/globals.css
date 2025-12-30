@@ -18,6 +18,7 @@ body {
   margin: auto;
   color: #dedce5;
   background-color: #000000;
+  background-image: linear-gradient(to bottom, #0e0e0e, #000000);
   background-size: cover;
   background-attachment: fixed;
   padding: 13px;
