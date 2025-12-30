@@ -31,7 +31,7 @@ export default function RootLayout({
               width={60}
               draggable={false}
             />
-            <h1>Map Veto Tool</h1>
+            <h1>Warcraft 3 Map Veto Tool</h1>
           </div>
           <NavLinks />
         </div>
