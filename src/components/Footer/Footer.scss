@@ -10,7 +10,7 @@ footer {
   margin-top: 4rem;
 
   /* WC3 Footer Style */
-  border-top: 2px solid #555;
+  border-top: 1px solid #555;
   color: #888;
   text-align: center;
   padding: 1rem 0;
@@ -25,15 +25,15 @@ footer {
 
   img {
     margin: 0;
-    transition: all 0.25s;
     border: none; /* Remove global border for icons if any */
+    opacity: 0.5;
+    transition: all 0.25s;
 
     &:hover {
       transform: rotate(3deg);
-      filter: brightness(1.2);
     }
     &:active {
-      opacity: 0.5;
+      opacity: 0.25;
     }
   }
 
@@ -43,11 +43,10 @@ footer {
     transition: all 0.2s ease-in-out;
 
     &:hover {
-      opacity: 0.8;
-      filter: drop-shadow(0 0 5px #ffcc00);
+      transform: rotate(5deg);
     }
     &:active {
-      transform: scale(0.9);
+      opacity: 0.25;
     }
   }
 }
