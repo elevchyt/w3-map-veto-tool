@@ -379,3 +379,17 @@ fieldset {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+
+@keyframes animation-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animation-pulse {
+  animation: animation-pulse 1.5s ease-in-out infinite;
+}

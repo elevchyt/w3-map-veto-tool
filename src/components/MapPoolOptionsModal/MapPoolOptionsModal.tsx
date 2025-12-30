@@ -28,7 +28,10 @@ export default function MapPoolOptionsModal(props: PropsType) {
           Map Pool Options
         </button>
         {props.selectedMapPool.name.startsWith("GNL") ? (
-          <span style={{ fontSize: "0.8em", marginLeft: "10px" }}>
+          <span
+            style={{ fontSize: "0.8em", marginLeft: "10px" }}
+            className="animation-pulse"
+          >
             ← Make sure to remove the starting map before creating the lobby!
           </span>
         ) : null}

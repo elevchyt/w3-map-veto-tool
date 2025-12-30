@@ -202,14 +202,6 @@ export default function Home() {
       order: pickBanOrder,
     };
 
-    console.log("=== DEBUG: About to create lobby ===");
-    console.log("pickBanMode:", pickBanMode);
-    console.log("pickBanOrder:", pickBanOrder);
-    console.log(
-      "Full newLobbyPayload:",
-      JSON.stringify(newLobbyPayload, null, 2)
-    );
-
     toast
       .promise(createLobby(newLobbyID, newLobbyPayload), {
         loading: "Creating your lobby...",
@@ -436,7 +428,7 @@ export default function Home() {
     <>
       <form onSubmit={handleSubmit}>
         {/* Map Pool Selection */}
-        <p>Choose a map pool:</p>
+        <p style={{ fontWeight: "bold" }}>Choose map pool and pick/ban mode:</p>
         <div className="map-pool-selection">
           {mapPools.length && !isLoadingData ? (
             <select
@@ -499,7 +491,7 @@ export default function Home() {
 
         {/* Player Names */}
         <div className="flex-column mt-2 mb-1">
-          <p>Player Names (or BattleTags):</p>
+          <p style={{ fontWeight: "bold" }}>Player Names (or BattleTags):</p>
           <input
             required
             name="p1Name"
