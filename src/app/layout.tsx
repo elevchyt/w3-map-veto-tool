@@ -4,7 +4,8 @@ import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer/Footer";
 import NavLinks from "@/components/NavLinks";
 import Image from "next/image";
-import logo from '../app/logo.webp'
+import logo from "../app/logo.webp";
+import "./page.scss";
 
 export const metadata: Metadata = {
   title: "W3 Map Veto Tool",
@@ -23,8 +24,14 @@ export default function RootLayout({
         <Toaster />
         <div className="app-header">
           <div className="title-container">
-          <Image src={logo} alt="logo" priority width={60} draggable={false} />
-          <h1>Map Veto Tool</h1>
+            <Image
+              src={logo}
+              alt="logo"
+              priority
+              width={60}
+              draggable={false}
+            />
+            <h1>Map Veto Tool</h1>
           </div>
           <NavLinks />
         </div>

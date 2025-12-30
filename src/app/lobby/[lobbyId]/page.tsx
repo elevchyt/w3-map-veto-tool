@@ -20,6 +20,35 @@ export default function Lobby() {
   const [isPending, setIsPending] = useState<boolean>(true);
   const [playerID, setPlayerID] = useState<string>("");
   const [p2URL, setP2URL] = useState<string>("");
+  const [validationError, setValidationError] = useState<string>("");
+
+  // Validate lobby data structure
+  const validateLobbyData = (data: any): boolean => {
+    if (!data) {
+      setValidationError("Lobby data is missing");
+      return false;
+    }
+    if (!data.p1 || !data.p1.id || !data.p1.name) {
+      setValidationError("Player 1 data is missing or incomplete");
+      return false;
+    }
+    if (!data.p2 || !data.p2.id || !data.p2.name) {
+      setValidationError("Player 2 data is missing or incomplete");
+      return false;
+    }
+    if (!Array.isArray(data.maps) || data.maps.length === 0) {
+      setValidationError("Maps data is missing or invalid");
+      return false;
+    }
+    if (!Array.isArray(data.order) || data.order.length === 0) {
+      setValidationError(
+        "Order data is missing or invalid. This lobby may have been created with an error."
+      );
+      return false;
+    }
+    setValidationError("");
+    return true;
+  };
 
   useEffect(() => {
     // Set setP1 as the current player if p1ID exists in the search params
@@ -42,17 +71,23 @@ export default function Lobby() {
     const lobbiesRef = ref(db, `/lobbies/${params.lobbyId}`);
     get(lobbiesRef)
       .then((snapshot) => {
-        setLobbyData(snapshot.val());
+        const data = snapshot.val();
+        if (validateLobbyData(data)) {
+          setLobbyData(data);
+        }
       })
       .catch((err) => {
         console.log(err);
+        setValidationError("Error loading lobby data");
       })
       .finally(() => setIsPending(false));
 
     // Establish realtime connection with lobby & get realtime updates
     const unsubscribe = onValue(lobbiesRef, (snapshot) => {
       const updatedLobbyData = snapshot.val();
-      setLobbyData(updatedLobbyData);
+      if (validateLobbyData(updatedLobbyData)) {
+        setLobbyData(updatedLobbyData);
+      }
     });
     return () => unsubscribe();
   }, [params.lobbyId, searchParams, setIsPending]);
@@ -64,7 +99,7 @@ export default function Lobby() {
 
   // Gets the first order data that isn't done
   const getOrderData = () => {
-    if (!lobbyData) return;
+    if (!lobbyData || !lobbyData.order) return;
     return lobbyData.order.find((order) => order.done === false);
   };
 
@@ -128,6 +163,25 @@ export default function Lobby() {
     return set(ref(db, `/lobbies/${params.lobbyId}`), payload);
   };
 
+  // Show loading state until data is fetched
+  if (isPending) {
+    return <Loading />;
+  }
+
+  // Show error if lobby doesn't exist or validation failed
+  if (!lobbyData || validationError) {
+    return (
+      <div>
+        <ErrorHint />
+        {validationError && (
+          <p style={{ color: "red", marginTop: "1rem", textAlign: "center" }}>
+            {validationError}
+          </p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="copy-link-container">
@@ -159,7 +213,7 @@ export default function Lobby() {
 
       {/* Maps Grid */}
       <div id="maps-grid">
-        {lobbyData?.maps.map((map) => (
+        {lobbyData.maps?.map((map) => (
           <Card
             key={map.id}
             id={map.id}
@@ -174,10 +228,9 @@ export default function Lobby() {
             handlePick={handlePick}
           />
         ))}
-        {isPending ? <Loading /> : null}
 
         {/* Feedback */}
-        {!lobbyData?.maps && !isPending ? <ErrorHint /> : null}
+        {!lobbyData.maps ? <ErrorHint /> : null}
       </div>
     </>
   );

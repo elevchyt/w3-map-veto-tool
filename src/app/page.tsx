@@ -34,7 +34,9 @@ export default function Home() {
   const [isLoadingData, setIsLoadingData] = useAtom(isLoadingDataAtom);
   const [mapPools, setMapPools] = useAtom(mapPoolsAtom);
   const [selectedMapPoolName, setSelectedMapPoolName] = useState("");
-  const [selectedPickBanOrder, setSelectedPickBanOrder] = useState("");
+  const [selectedPickBanOrder, setSelectedPickBanOrder] = useState(
+    PickBanModeEnum.ABBAAB
+  );
   const [selectedMapPool, setSelectedMapPool] = useState<MapPoolType>({
     name: "",
     maps: [],
@@ -175,7 +177,8 @@ export default function Home() {
     const p2ID = short.generate();
     const p1Name = formData.get("p1Name") as string;
     const p2Name = formData.get("p2Name") as string;
-    const pickBanMode = formData.get("pickBanMode") as PickBanModeEnum;
+    // Use state instead of formData for pickBanMode since disabled fields don't submit
+    const pickBanMode = selectedPickBanOrder as PickBanModeEnum;
     const finalMapPool = setupMapPool(selectedMapPool);
     if (!finalMapPool) return;
 
@@ -198,6 +201,14 @@ export default function Home() {
       maps: finalMapPool.maps,
       order: pickBanOrder,
     };
+
+    console.log("=== DEBUG: About to create lobby ===");
+    console.log("pickBanMode:", pickBanMode);
+    console.log("pickBanOrder:", pickBanOrder);
+    console.log(
+      "Full newLobbyPayload:",
+      JSON.stringify(newLobbyPayload, null, 2)
+    );
 
     toast
       .promise(createLobby(newLobbyID, newLobbyPayload), {
@@ -394,6 +405,19 @@ export default function Home() {
           };
         });
         break;
+      case PickBanModeEnum.AB:
+        pickBanOrder = mapPool.maps.map((map, index) => {
+          const playerID = index % 2 === 0 ? p1ID : p2ID;
+          return {
+            id: playerID,
+            done: false,
+            actionType:
+              index < mapPool.maps.length - 1
+                ? ActionTypeEnum.BAN
+                : ActionTypeEnum.PICK,
+          };
+        });
+        break;
     }
     return pickBanOrder;
   };
@@ -452,7 +476,7 @@ export default function Home() {
             name="pickBanMode"
             value={selectedPickBanOrder}
             onChange={(e) => {
-              setSelectedPickBanOrder(e.target.value);
+              setSelectedPickBanOrder(e.target.value as PickBanModeEnum);
             }}
             data-tooltip-id="pick-ban-tooltip"
             data-tooltip-content="Banning order"
