@@ -212,7 +212,7 @@ button[disabled],
 input[type="submit"][disabled],
 input[type="reset"][disabled],
 input[type="button"][disabled],
-input[type="file"]::file-selector-button[disabled] {
+input[type="file"]:disabled::file-selector-button {
   cursor: default;
   opacity: 0.5;
 }
