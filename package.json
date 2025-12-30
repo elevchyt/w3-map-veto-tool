@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.6.1",
     "firebase": "^10.14.1",
     "jotai": "^2.10.1",
     "lodash": "^4.17.21",

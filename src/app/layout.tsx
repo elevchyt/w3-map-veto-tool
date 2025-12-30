@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import { Toaster } from "react-hot-toast";
 import Footer from "@/components/Footer/Footer";
 import NavLinks from "@/components/NavLinks";
+import { Analytics } from "@vercel/analytics/next";
+import type { Metadata } from "next";
+import localFont from "next/font/local";
 import Image from "next/image";
+import { Toaster } from "react-hot-toast";
 import logo from "../app/logo.webp";
+import "./globals.css";
 import "./page.scss";
 
 const frizQuadrata = localFont({
@@ -44,6 +45,7 @@ export default function RootLayout({
         </div>
         {children}
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
