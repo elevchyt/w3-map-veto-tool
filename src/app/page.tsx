@@ -4,6 +4,7 @@
 import { isLoadingDataAtom, mapPoolsAtom } from "@/atoms/atoms";
 import ErrorHint from "@/components/ErrorHint";
 import Loading from "@/components/Loading";
+import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
 import { db } from "@/firebase/firebase";
 import {
   ActionTypeEnum,
@@ -13,24 +14,19 @@ import {
   OrderType,
   PickBanModeEnum,
 } from "@/types/types";
+import { GNLS17MapNames } from "@/utils/customMapPools";
+import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
+import { getMapBestMatchByName } from "@/utils/utils";
 import { ref, set } from "firebase/database";
 import { useAtom } from "jotai";
 import _ from "lodash";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import toast from "react-hot-toast";
-import short from "short-uuid";
-import "./page.scss";
-import MapPoolOptionsModal from "@/components/MapPoolOptionsModal/MapPoolOptionsModal";
-import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
-import { getMapBestMatchByName } from "@/utils/utils";
-import {
-  DACHInfernoMapNames,
-  GNLS15MapNames,
-  GNLSeason15MapNames,
-} from "@/utils/customMapPools";
-import stringSimilarity from "string-similarity";
 import { Tooltip } from "react-tooltip";
+import short from "short-uuid";
+import stringSimilarity from "string-similarity";
+import "./page.scss";
 
 export default function Home() {
   const router = useRouter();
@@ -100,22 +96,15 @@ export default function Home() {
         );
         const maps1v1w3c = mapsPerGameMode.get("1 vs 1")?.[0]["maps"] ?? [];
         const maps2v2w3c = mapsPerGameMode.get("2 vs 2")?.[0]["maps"] ?? [];
-        const maps3v3w3c = mapsPerGameMode.get("3 vs 3")?.[0]["maps"] ?? [];
         const maps4v4w3c = mapsPerGameMode.get("4 vs 4")?.[0]["maps"] ?? [];
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode.get("All The Randoms 1vs1")?.[0]["maps"] ?? [];
-        const mapsDACHInferno =
-          createMapPoolByMapNames(mapsPerGameMode, DACHInfernoMapNames) ?? [];
-        const mapsGNLSeason15Inferno =
-          createMapPoolByMapNames(mapsPerGameMode, GNLSeason15MapNames) ?? [];
+        const mapsGNLSeason17 =
+          createMapPoolByMapNames(mapsPerGameMode, GNLS17MapNames) ?? [];
         const presetMapPools: MapPoolType[] = [
           {
-            name: "GNL Season 15",
-            maps: mapsGNLSeason15Inferno,
-          },
-          {
-            name: "DACH Inferno",
-            maps: mapsDACHInferno,
+            name: "GNL Season 17",
+            maps: mapsGNLSeason17,
           },
           {
             name: "W3Champions (1v1)",
@@ -124,10 +113,6 @@ export default function Home() {
           {
             name: "W3Champions (2v2)",
             maps: maps2v2w3c,
-          },
-          {
-            name: "W3Champions (3v3)",
-            maps: maps3v3w3c,
           },
           {
             name: "W3Champions (4v4)",
@@ -435,6 +420,12 @@ export default function Home() {
               name="mapPool"
               value={selectedMapPoolName}
               onChange={(e) => {
+                // If the user selects a GNL map pool, set the pick/ban mode to ABBAAB by default!
+                if (e.target.value.startsWith("GNL")) {
+                  setSelectedPickBanOrder(PickBanModeEnum.ABBAAB);
+                }
+
+                // Update selected map pool state
                 setSelectedMapPoolName(e.target.value);
                 const selectedPool = mapPools.find(
                   (pool) => pool.name === e.target.value
@@ -457,6 +448,7 @@ export default function Home() {
           />
           <select
             required
+            disabled={selectedMapPool.name.startsWith("GNL")}
             name="pickBanMode"
             value={selectedPickBanOrder}
             onChange={(e) => {
@@ -476,6 +468,7 @@ export default function Home() {
 
         {/* Map Pool Options */}
         <MapPoolOptionsModal
+          selectedMapPool={selectedMapPool}
           maps={selectedMapPool?.maps}
           toggleMap={toggleMap}
         />
@@ -488,12 +481,14 @@ export default function Home() {
             name="p1Name"
             type="text"
             placeholder="Player 1 Name (Host)"
+            autoComplete="off"
           />
           <input
             required
             name="p2Name"
             type="text"
             placeholder="Player 2 Name"
+            autoComplete="off"
           />
         </div>
 

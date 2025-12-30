@@ -1,9 +1,10 @@
 import React, { useRef } from "react";
 import "./MapPoolOptionsModal.scss";
-import { MapType } from "@/types/types";
+import { MapPoolType, MapType } from "@/types/types";
 import shortUUID from "short-uuid";
 
 type PropsType = {
+  selectedMapPool: MapPoolType;
   maps: MapType[] | undefined;
   toggleMap: (mapID: number) => void;
 };
@@ -22,9 +23,16 @@ export default function MapPoolOptionsModal(props: PropsType) {
 
   return (
     <div>
-      <button className="generic-button" type="button" onClick={openModal}>
-        Map Pool Options
-      </button>
+      <div>
+        <button className="generic-button" type="button" onClick={openModal}>
+          Map Pool Options
+        </button>
+        {props.selectedMapPool.name.startsWith("GNL") ? (
+          <span style={{ fontSize: "0.8em", marginLeft: "10px" }}>
+            ← Make sure to remove the starting map before creating the lobby!
+          </span>
+        ) : null}
+      </div>
 
       <dialog ref={dialogRef}>
         <h2>Map Pool Options</h2>
