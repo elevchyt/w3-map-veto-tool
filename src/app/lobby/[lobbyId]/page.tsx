@@ -196,6 +196,12 @@ export default function Lobby() {
             Copy Opponent&apos;s URL
           </button>
         ) : null}
+        <span
+          style={{ fontSize: "0.8em", marginLeft: "10px" }}
+          className="animation-pulse"
+        >
+          ← Click this button and send the link to your opponent!
+        </span>
       </div>
 
       {/* Lobby State */}
