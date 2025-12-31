@@ -8,7 +8,7 @@ import { SiGithub } from "react-icons/si";
 export default function Footer() {
   return (
     <footer>
-      <p>Created by biskuit#21557</p>
+      <p style={{ userSelect: "text" }}>Discord: @biskuu</p>
       <a href="https://ko-fi.com/O4O3LO6XY" target="_blank">
         <img
           width={128}
