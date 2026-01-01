@@ -381,10 +381,10 @@ export default function Home() {
             index === mapPool.maps.length - 2
               ? p1ID
               : index === mapPool.maps.length - 1
-              ? p2ID
-              : Math.floor(index / 2) % 2 === 0
-              ? p1ID
-              : p2ID;
+                ? p2ID
+                : Math.floor(index / 2) % 2 === 0
+                  ? p1ID
+                  : p2ID;
           if (index === mapPool.maps.length - 1) playerID = p2ID;
           else if (index === mapPool.maps.length - 2) playerID = p1ID;
           return {
@@ -443,7 +443,7 @@ export default function Home() {
     <>
       <form onSubmit={handleSubmit}>
         {/* Map Pool Selection */}
-        <p style={{ fontWeight: "bold" }}>Choose map pool and pick/ban mode:</p>
+        <p style={{ fontWeight: "bold" }}>Choose map pool and banning order:</p>
         <div className="map-pool-selection">
           {mapPools.length && !isLoadingData ? (
             <select
