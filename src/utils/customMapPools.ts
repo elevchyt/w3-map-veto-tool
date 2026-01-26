@@ -5,7 +5,7 @@ export const GNLS17MapNames = [
   "Concealed Hill",
   "Springtime",
   "Hammerfall",
-  "War Hail",
+  "Last Refuge",
   "Northern Isles",
   "Shallow Grave",
   "Tidehunters",
