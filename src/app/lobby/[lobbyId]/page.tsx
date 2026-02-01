@@ -42,7 +42,7 @@ export default function Lobby() {
     }
     if (!Array.isArray(data.order) || data.order.length === 0) {
       setValidationError(
-        "Order data is missing or invalid. This lobby may have been created with an error."
+        "Order data is missing or invalid. This lobby may have been created with an error.",
       );
       return false;
     }
@@ -59,7 +59,7 @@ export default function Lobby() {
     const p2ID = searchParams.get("p2ID");
     if (p2ID)
       setP2URL(
-        `https://${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`
+        `https://${window.location.hostname}/lobby/${params.lobbyId}?setP2=${p2ID}`,
       );
 
     // If P2 ID exists in search params with the key "setP2", set current player's sessions as P2
@@ -147,7 +147,7 @@ export default function Lobby() {
     // Find the highest pickNumber value among the maps and assign that
     const highestPickNumber = Math.max(
       0,
-      ...lobbyData.maps.map((map) => map.pickNumber || 0)
+      ...lobbyData.maps.map((map) => map.pickNumber || 0),
     );
     const pickNumber = highestPickNumber + 1;
     const payload = {
@@ -185,23 +185,27 @@ export default function Lobby() {
   return (
     <>
       <div className="copy-link-container">
-        <small>{`Lobby ID: ${params.lobbyId}`}</small>
+        <small
+          style={{ userSelect: "text" }}
+        >{`Lobby ID: ${params.lobbyId}`}</small>
         {p2URL ? (
-          <button
-            className="generic-button"
-            onClick={() => {
-              copyP2URL();
-            }}
-          >
-            Copy Opponent&apos;s URL
-          </button>
+          <>
+            <button
+              className="generic-button"
+              onClick={() => {
+                copyP2URL();
+              }}
+            >
+              Copy Opponent&apos;s URL
+            </button>
+            <span
+              style={{ fontSize: "0.8em", marginLeft: "10px" }}
+              className="animation-pulse"
+            >
+              ← Click this button and send the link to your opponent!
+            </span>
+          </>
         ) : null}
-        <span
-          style={{ fontSize: "0.8em", marginLeft: "10px" }}
-          className="animation-pulse"
-        >
-          ← Click this button and send the link to your opponent!
-        </span>
       </div>
 
       {/* Lobby State */}
