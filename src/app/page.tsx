@@ -101,12 +101,12 @@ export default function Home() {
         const maps4v4w3c = mapsPerGameMode.get("4 vs 4")?.[0]["maps"] ?? [];
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode.get("All The Randoms 1vs1")?.[0]["maps"] ?? [];
-        const mapsGNLSeason17 =
+        const mapsGNLSeason18 =
           createMapPoolByMapNames(mapsPerGameMode, GNLS18MapNames) ?? [];
         const presetMapPools: MapPoolType[] = [
           {
-            name: "GNL Season 17",
-            maps: mapsGNLSeason17,
+            name: "GNL Season 18",
+            maps: mapsGNLSeason18,
           },
           {
             name: "W3Champions (1v1)",
