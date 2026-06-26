@@ -14,7 +14,7 @@ import {
   OrderType,
   PickBanModeEnum,
 } from "@/types/types";
-import { GNLS17MapNames } from "@/utils/customMapPools";
+import { GNLS18MapNames } from "@/utils/customMapPools";
 import { w3championsLadderMapsDataURL, w3infoMapsURL } from "@/utils/urls";
 import { getMapBestMatchByName } from "@/utils/utils";
 import { ref, set } from "firebase/database";
@@ -102,7 +102,7 @@ export default function Home() {
         const mapsAllTheRandoms1v1w3c =
           mapsPerGameMode.get("All The Randoms 1vs1")?.[0]["maps"] ?? [];
         const mapsGNLSeason17 =
-          createMapPoolByMapNames(mapsPerGameMode, GNLS17MapNames) ?? [];
+          createMapPoolByMapNames(mapsPerGameMode, GNLS18MapNames) ?? [];
         const presetMapPools: MapPoolType[] = [
           {
             name: "GNL Season 17",
