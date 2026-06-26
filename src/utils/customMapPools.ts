@@ -7,7 +7,7 @@ export const GNLS18MapNames = [
   "Springtime",
   "Hammerfall",
   "Autumn Leaves",
-  "Echo Isles V2",
+  "Echo Isles",
   "Fading Autumn",
-  "Turtle Rock V2",
+  "Turtle Rock",
 ];

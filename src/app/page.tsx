@@ -145,21 +145,23 @@ export default function Home() {
       mapNamesPool.map((mapName) => [mapName, false])
     ); // ensures no duplicate maps are inserted
     const maps: MapType[] = [];
+    const nameSimilarityThreshold = 0.7;
     for (const [_key, pool] of Array.from(mapsPerGameMode.entries())) {
       const mapPool = pool[0].maps;
       for (const map of mapPool) {
-        for (const mapName of mapNamesPool) {
-          const nameSimilarityThreshold = 0.7;
-          const bestMatch = stringSimilarity.findBestMatch(
-            map.name,
-            mapNamesPool
-          );
-          const isFound = bestMatch.bestMatch.rating >= nameSimilarityThreshold;
-          if (isFound && !mapsFoundData.get(mapName)) {
-            mapsFoundData.set(mapName, true);
-            maps.push(map);
-            break;
-          }
+        const bestMatch = stringSimilarity.findBestMatch(
+          map.name,
+          mapNamesPool
+        );
+        const matchedName = bestMatch.bestMatch.target;
+        const isFound = bestMatch.bestMatch.rating >= nameSimilarityThreshold;
+        // Dedupe on the name that actually matched, not on an arbitrary
+        // pool entry — otherwise maps appearing in multiple game modes
+        // (e.g. Northern Isles in both "1 vs 1" and "Warhammer 1v1") get
+        // pushed twice and fill slots meant for other maps.
+        if (isFound && !mapsFoundData.get(matchedName)) {
+          mapsFoundData.set(matchedName, true);
+          maps.push(map);
         }
       }
     }
